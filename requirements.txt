@@ -28,3 +28,4 @@ tenacity
 duckdb
 ibis-framework
 narwhals
+python-docx
