@@ -1,5 +1,18 @@
 # 🚀 AI数据分析系统 - 快速启动指南
 
+## 📁 样例文件与参考资料
+
+### 🗂️ 核心文档
+- **SAMPLE_DATA_GUIDE.md** - 详细的样例数据使用指南
+- **ANALYSIS_EXAMPLES.md** - 8个完整的分析示例与结果解释
+- **REFERENCES.md** - 25篇权威学术文献参考库
+- **comprehensive_test_data.csv** - 500样本26变量综合测试数据集
+
+### 📊 推荐学习路径
+1. **新手用户**: 阅读SAMPLE_DATA_GUIDE.md → 尝试基础分析
+2. **进阶用户**: 参考ANALYSIS_EXAMPLES.md → 学习结果解释
+3. **专业用户**: 查阅REFERENCES.md → 深度理论学习
+
 ## 系统状态
 
 ✅ 系统核心功能已开发完成并通过基础测试
