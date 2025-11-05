@@ -33,7 +33,7 @@ from src.ai_agent.ai_assistant import create_ai_assistant
 
 # 导入AI增强模块
 try:
-    from src.ai_agent.ai_report_enhancer import create_ai_enhancer, DEFAULT_CONFIGS, AIModelConfig
+    from src.ai_agent.ai_report_enhancer import create_ai_enhancer, DEFAULT_CONFIGS, AIModelConfig, AIReportEnhancer
     AI_ENHANCEMENT_AVAILABLE = True
 except ImportError:
     AI_ENHANCEMENT_AVAILABLE = False

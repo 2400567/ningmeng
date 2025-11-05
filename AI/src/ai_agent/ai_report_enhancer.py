@@ -45,10 +45,11 @@ class AIReportEnhancer:
         """初始化AI客户端"""
         try:
             if self.config.provider == 'openai':
-                openai.api_key = self.config.api_key
-                if self.config.api_base:
-                    openai.api_base = self.config.api_base
-                self.client = openai
+                from openai import OpenAI
+                self.client = OpenAI(
+                    api_key=self.config.api_key,
+                    base_url=self.config.api_base if self.config.api_base else None
+                )
                 logger.info("OpenAI客户端初始化成功")
                 
             elif self.config.provider == 'qwen':
@@ -268,7 +269,7 @@ class AIReportEnhancer:
         """调用AI模型获取响应"""
         try:
             if self.config.provider == 'openai':
-                response = openai.ChatCompletion.create(
+                response = self.client.chat.completions.create(
                     model=self.config.model_name,
                     messages=[
                         {"role": "system", "content": "你是一位专业的数据分析专家，具有丰富的统计学和业务理解能力。"},
