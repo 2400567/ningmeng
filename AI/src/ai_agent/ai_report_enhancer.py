@@ -76,8 +76,31 @@ class AIReportEnhancer:
                 logger.info("本地模型客户端初始化成功")
                 
         except Exception as e:
-            logger.error(f"AI客户端初始化失败: {str(e)}")
-            raise
+            import traceback
+            error_details = {
+                "error_type": type(e).__name__,
+                "error_message": str(e),
+                "provider": self.config.provider,
+                "api_key_provided": bool(self.config.api_key),
+                "api_base": self.config.api_base,
+                "traceback": traceback.format_exc()
+            }
+            
+            logger.error(f"AI客户端初始化失败: {error_details}")
+            
+            # 提供详细的初始化错误信息
+            if "No module named" in str(e):
+                detailed_error = f"缺少依赖模块: {str(e)}\n" \
+                               f"建议: pip install openai"
+            elif self.config.provider == 'openai' and not self.config.api_key:
+                detailed_error = f"OpenAI API密钥未配置\n" \
+                               f"建议: 在配置中设置正确的API密钥"
+            else:
+                detailed_error = f"客户端初始化失败: {str(e)}\n" \
+                               f"提供商: {self.config.provider}\n" \
+                               f"详细信息: {traceback.format_exc()}"
+            
+            raise Exception(detailed_error)
     
     def enhance_analysis_results(self, 
                                 data: pd.DataFrame,
@@ -348,8 +371,41 @@ class AIReportEnhancer:
                 return result['response']
                 
         except Exception as e:
-            logger.error(f"调用AI模型失败: {str(e)}")
-            raise
+            # 详细的错误信息记录
+            import traceback
+            error_details = {
+                "error_type": type(e).__name__,
+                "error_message": str(e),
+                "provider": self.config.provider,
+                "model": self.config.model_name,
+                "api_base": self.config.api_base,
+                "traceback": traceback.format_exc()
+            }
+            
+            logger.error(f"调用AI模型失败: {error_details}")
+            
+            # 根据错误类型提供更详细的错误信息
+            if "Connection error" in str(e):
+                detailed_error = f"网络连接错误: {str(e)}\n" \
+                               f"提供商: {self.config.provider}\n" \
+                               f"API地址: {self.config.api_base or '默认地址'}\n" \
+                               f"建议: 检查网络连接或API地址配置"
+            elif "Authentication" in str(e) or "Unauthorized" in str(e):
+                detailed_error = f"认证错误: {str(e)}\n" \
+                               f"建议: 检查API密钥是否正确配置"
+            elif "timeout" in str(e).lower():
+                detailed_error = f"请求超时: {str(e)}\n" \
+                               f"超时设置: {self.config.timeout}秒\n" \
+                               f"建议: 增加超时时间或检查网络状况"
+            elif "rate limit" in str(e).lower():
+                detailed_error = f"API调用频率限制: {str(e)}\n" \
+                               f"建议: 稍后重试或升级API套餐"
+            else:
+                detailed_error = f"未知错误: {str(e)}\n" \
+                               f"错误类型: {type(e).__name__}\n" \
+                               f"详细信息: {traceback.format_exc()}"
+            
+            raise Exception(detailed_error)
     
     def _integrate_ai_response(self, 
                               original_results: Dict, 
