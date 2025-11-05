@@ -1,0 +1,366 @@
+2025-11-05 12:15:21,988 - __main__ - INFO - 开始测试报告生成功能
+2025-11-05 12:15:22,114 - matplotlib - DEBUG - matplotlib data path: /usr/local/python/3.12.1/lib/python3.12/site-packages/matplotlib/mpl-data
+2025-11-05 12:15:22,119 - matplotlib - DEBUG - CONFIGDIR=/home/codespace/.config/matplotlib
+2025-11-05 12:15:22,120 - matplotlib - DEBUG - interactive is False
+2025-11-05 12:15:22,120 - matplotlib - DEBUG - platform is linux
+2025-11-05 12:15:22,142 - matplotlib - DEBUG - CACHEDIR=/home/codespace/.cache/matplotlib
+2025-11-05 12:15:22,143 - matplotlib.font_manager - DEBUG - Using fontManager instance from /home/codespace/.cache/matplotlib/fontlist-v390.json
+2025-11-05 12:15:23,070 - __main__ - INFO - 创建报告生成器
+2025-11-05 12:15:23,071 - __main__ - INFO - 测试正常情况下的报告生成
+2025-11-05 12:15:23,071 - src.report_generation.report_generator - INFO - 开始生成完整的数据分析报告
+2025-11-05 12:15:23,071 - src.report_generation.report_generator - INFO - 输入数据类型: <class 'pandas.core.frame.DataFrame'>, 行数: 5
+2025-11-05 12:15:23,071 - src.report_generation.report_generator - INFO - 分析结果键: ['analysis_type', 'descriptive_stats', 'correlation', 'model_recommendations', 'key_findings', 'conclusions', 'recommendations']
+2025-11-05 12:15:23,071 - src.report_generation.report_generator - INFO - 图表类型: <class 'dict'>, 图表数量: 0
+2025-11-05 12:15:23,071 - src.report_generation.report_generator - INFO - 文件信息: {'file_name': 'test_data.csv', 'file_format': 'CSV'}
+2025-11-05 12:15:23,072 - src.report_generation.report_generator - INFO - 创建报告，标题: 数据分析报告 - test_data.csv
+2025-11-05 12:15:23,087 - src.report_generation.report_generator - INFO - 报告文档创建成功
+2025-11-05 12:15:23,087 - src.report_generation.report_generator - INFO - 添加执行摘要
+2025-11-05 12:15:23,087 - src.report_generation.report_generator - INFO - 开始生成执行摘要
+2025-11-05 12:15:23,088 - src.report_generation.report_generator - DEBUG - 数据基本信息: 5 行, 3 列
+2025-11-05 12:15:23,088 - src.report_generation.report_generator - DEBUG - 分析类型: 描述性统计分析
+2025-11-05 12:15:23,088 - src.report_generation.report_generator - DEBUG - 主要发现类型: <class 'list'>, 内容: ['数据质量良好', '特征A和B存在强相关性', '无明显异常值']
+2025-11-05 12:15:23,088 - src.report_generation.report_generator - DEBUG - 添加主要发现 1: 数据质量良好
+2025-11-05 12:15:23,088 - src.report_generation.report_generator - DEBUG - 添加主要发现 2: 特征A和B存在强相关性
+2025-11-05 12:15:23,088 - src.report_generation.report_generator - DEBUG - 添加主要发现 3: 无明显异常值
+2025-11-05 12:15:23,088 - src.report_generation.report_generator - DEBUG - 推荐模型: 线性回归
+2025-11-05 12:15:23,088 - src.report_generation.report_generator - DEBUG - 生成的摘要文本长度: 100
+2025-11-05 12:15:23,090 - src.report_generation.report_generator - INFO - 执行摘要生成完成
+2025-11-05 12:15:23,090 - src.report_generation.report_generator - INFO - 执行摘要添加成功
+2025-11-05 12:15:23,090 - src.report_generation.report_generator - INFO - 添加数据概览
+2025-11-05 12:15:23,108 - src.report_generation.report_generator - INFO - 数据概览添加成功
+2025-11-05 12:15:23,108 - src.report_generation.report_generator - INFO - 添加分析结果
+2025-11-05 12:15:23,108 - src.report_generation.report_generator - INFO - 开始添加分析结果
+2025-11-05 12:15:23,110 - src.report_generation.report_generator - DEBUG - analysis_results keys: ['analysis_type', 'descriptive_stats', 'correlation', 'model_recommendations', 'key_findings', 'conclusions', 'recommendations']
+2025-11-05 12:15:23,110 - src.report_generation.report_generator - INFO - 添加描述性统计
+2025-11-05 12:15:23,111 - src.report_generation.report_generator - DEBUG - stats_df type: <class 'pandas.core.frame.DataFrame'>
+2025-11-05 12:15:23,129 - src.report_generation.report_generator - INFO - 描述性统计表格添加成功
+2025-11-05 12:15:23,129 - src.report_generation.report_generator - INFO - 添加相关性分析
+2025-11-05 12:15:23,131 - src.report_generation.report_generator - DEBUG - corr_results type: <class 'dict'>, keys: ['method', 'strong_correlations']
+2025-11-05 12:15:23,131 - src.report_generation.report_generator - DEBUG - strong_correlations type: <class 'list'>, length: 1
+2025-11-05 12:15:23,133 - src.report_generation.report_generator - DEBUG - 添加强相关对: A - B: 0.95
+2025-11-05 12:15:23,133 - src.report_generation.report_generator - INFO - 相关性分析添加成功
+2025-11-05 12:15:23,134 - src.report_generation.report_generator - INFO - 添加模型推荐
+2025-11-05 12:15:23,134 - src.report_generation.report_generator - DEBUG - recommendations type: <class 'list'>, length: 1
+2025-11-05 12:15:23,139 - src.report_generation.report_generator - DEBUG - 添加模型推荐: 线性回归
+2025-11-05 12:15:23,139 - src.report_generation.report_generator - INFO - 模型推荐添加成功
+2025-11-05 12:15:23,139 - src.report_generation.report_generator - INFO - 分析结果添加完成
+2025-11-05 12:15:23,139 - src.report_generation.report_generator - INFO - 分析结果添加成功
+2025-11-05 12:15:23,139 - src.report_generation.report_generator - INFO - 无图表需要添加
+2025-11-05 12:15:23,139 - src.report_generation.report_generator - INFO - 添加结论和建议
+2025-11-05 12:15:23,139 - src.report_generation.report_generator - INFO - 开始生成结论和建议
+2025-11-05 12:15:23,139 - src.report_generation.report_generator - DEBUG - 结论类型: <class 'list'>, 内容: ['数据适合进行回归分析', '建议使用线性模型']
+2025-11-05 12:15:23,139 - src.report_generation.report_generator - DEBUG - 添加结论 1: 数据适合进行回归分析
+2025-11-05 12:15:23,140 - src.report_generation.report_generator - DEBUG - 添加结论 2: 建议使用线性模型
+2025-11-05 12:15:23,140 - src.report_generation.report_generator - DEBUG - 生成的结论文本长度: 47
+2025-11-05 12:15:23,141 - src.report_generation.report_generator - INFO - 结论添加成功
+2025-11-05 12:15:23,141 - src.report_generation.report_generator - DEBUG - 找到 2 个预设建议
+2025-11-05 12:15:23,141 - src.report_generation.report_generator - DEBUG - 最终建议数量: 2
+2025-11-05 12:15:23,146 - src.report_generation.report_generator - INFO - 建议添加成功
+2025-11-05 12:15:23,147 - src.report_generation.report_generator - INFO - 结论和建议添加成功
+2025-11-05 12:15:23,147 - src.report_generation.report_generator - INFO - 开始保存报告
+2025-11-05 12:15:23,164 - src.report_generation.report_generator - INFO - 报告保存成功，路径: /workspaces/ningmeng/AI/temp/test_report_normal.docx
+2025-11-05 12:15:23,164 - __main__ - INFO - 正常情况测试成功，报告保存至: /workspaces/ningmeng/AI/temp/test_report_normal.docx
+2025-11-05 12:15:23,164 - __main__ - INFO - 测试analysis_results为None的情况
+2025-11-05 12:15:23,164 - src.report_generation.report_generator - INFO - 开始生成完整的数据分析报告
+2025-11-05 12:15:23,164 - src.report_generation.report_generator - INFO - 输入数据类型: <class 'pandas.core.frame.DataFrame'>, 行数: 5
+2025-11-05 12:15:23,165 - src.report_generation.report_generator - INFO - 分析结果键: []
+2025-11-05 12:15:23,165 - src.report_generation.report_generator - INFO - 图表类型: <class 'dict'>, 图表数量: 0
+2025-11-05 12:15:23,165 - src.report_generation.report_generator - INFO - 文件信息: {'file_name': 'test_data.csv', 'file_format': 'CSV'}
+2025-11-05 12:15:23,165 - src.report_generation.report_generator - INFO - 创建报告，标题: 数据分析报告 - test_data.csv
+2025-11-05 12:15:23,178 - src.report_generation.report_generator - INFO - 报告文档创建成功
+2025-11-05 12:15:23,178 - src.report_generation.report_generator - INFO - 添加执行摘要
+2025-11-05 12:15:23,178 - src.report_generation.report_generator - INFO - 开始生成执行摘要
+2025-11-05 12:15:23,178 - src.report_generation.report_generator - DEBUG - 数据基本信息: 5 行, 3 列
+2025-11-05 12:15:23,178 - src.report_generation.report_generator - DEBUG - 主要发现类型: <class 'NoneType'>, 内容: None
+2025-11-05 12:15:23,178 - src.report_generation.report_generator - INFO - 没有找到key_findings，尝试从其他分析结果中提取发现
+2025-11-05 12:15:23,179 - src.report_generation.report_generator - DEBUG - 生成的摘要文本长度: 29
+2025-11-05 12:15:23,180 - src.report_generation.report_generator - INFO - 执行摘要生成完成
+2025-11-05 12:15:23,180 - src.report_generation.report_generator - INFO - 执行摘要添加成功
+2025-11-05 12:15:23,180 - src.report_generation.report_generator - INFO - 添加数据概览
+2025-11-05 12:15:23,197 - src.report_generation.report_generator - INFO - 数据概览添加成功
+2025-11-05 12:15:23,197 - src.report_generation.report_generator - INFO - 添加分析结果
+2025-11-05 12:15:23,197 - src.report_generation.report_generator - INFO - 开始添加分析结果
+2025-11-05 12:15:23,199 - src.report_generation.report_generator - WARNING - analysis_results为空，添加默认消息
+2025-11-05 12:15:23,199 - src.report_generation.report_generator - INFO - 分析结果添加成功
+2025-11-05 12:15:23,199 - src.report_generation.report_generator - INFO - 无图表需要添加
+2025-11-05 12:15:23,199 - src.report_generation.report_generator - INFO - 添加结论和建议
+2025-11-05 12:15:23,199 - src.report_generation.report_generator - INFO - 开始生成结论和建议
+2025-11-05 12:15:23,199 - src.report_generation.report_generator - DEBUG - 结论类型: <class 'NoneType'>, 内容: None
+2025-11-05 12:15:23,199 - src.report_generation.report_generator - INFO - 没有找到预设结论，生成自动结论
+2025-11-05 12:15:23,199 - src.report_generation.report_generator - DEBUG - 生成的结论文本长度: 53
+2025-11-05 12:15:23,201 - src.report_generation.report_generator - INFO - 结论添加成功
+2025-11-05 12:15:23,201 - src.report_generation.report_generator - INFO - 没有找到预设建议，生成自动建议
+2025-11-05 12:15:23,201 - src.report_generation.report_generator - DEBUG - 最终建议数量: 4
+2025-11-05 12:15:23,207 - src.report_generation.report_generator - INFO - 建议添加成功
+2025-11-05 12:15:23,207 - src.report_generation.report_generator - INFO - 结论和建议添加成功
+2025-11-05 12:15:23,207 - src.report_generation.report_generator - INFO - 开始保存报告
+2025-11-05 12:15:23,225 - src.report_generation.report_generator - INFO - 报告保存成功，路径: /workspaces/ningmeng/AI/temp/test_report_none_analysis.docx
+2025-11-05 12:15:23,225 - __main__ - INFO - None analysis_results测试成功，报告保存至: /workspaces/ningmeng/AI/temp/test_report_none_analysis.docx
+2025-11-05 12:15:23,225 - __main__ - INFO - 测试空analysis_results的情况
+2025-11-05 12:15:23,225 - src.report_generation.report_generator - INFO - 开始生成完整的数据分析报告
+2025-11-05 12:15:23,225 - src.report_generation.report_generator - INFO - 输入数据类型: <class 'pandas.core.frame.DataFrame'>, 行数: 5
+2025-11-05 12:15:23,226 - src.report_generation.report_generator - INFO - 分析结果键: []
+2025-11-05 12:15:23,226 - src.report_generation.report_generator - INFO - 图表类型: <class 'dict'>, 图表数量: 0
+2025-11-05 12:15:23,226 - src.report_generation.report_generator - INFO - 文件信息: {'file_name': 'test_data.csv', 'file_format': 'CSV'}
+2025-11-05 12:15:23,226 - src.report_generation.report_generator - INFO - 创建报告，标题: 数据分析报告 - test_data.csv
+2025-11-05 12:15:23,247 - src.report_generation.report_generator - INFO - 报告文档创建成功
+2025-11-05 12:15:23,247 - src.report_generation.report_generator - INFO - 添加执行摘要
+2025-11-05 12:15:23,247 - src.report_generation.report_generator - INFO - 开始生成执行摘要
+2025-11-05 12:15:23,247 - src.report_generation.report_generator - DEBUG - 数据基本信息: 5 行, 3 列
+2025-11-05 12:15:23,247 - src.report_generation.report_generator - DEBUG - 主要发现类型: <class 'NoneType'>, 内容: None
+2025-11-05 12:15:23,248 - src.report_generation.report_generator - INFO - 没有找到key_findings，尝试从其他分析结果中提取发现
+2025-11-05 12:15:23,248 - src.report_generation.report_generator - DEBUG - 生成的摘要文本长度: 29
+2025-11-05 12:15:23,249 - src.report_generation.report_generator - INFO - 执行摘要生成完成
+2025-11-05 12:15:23,249 - src.report_generation.report_generator - INFO - 执行摘要添加成功
+2025-11-05 12:15:23,249 - src.report_generation.report_generator - INFO - 添加数据概览
+2025-11-05 12:15:23,267 - src.report_generation.report_generator - INFO - 数据概览添加成功
+2025-11-05 12:15:23,267 - src.report_generation.report_generator - INFO - 添加分析结果
+2025-11-05 12:15:23,267 - src.report_generation.report_generator - INFO - 开始添加分析结果
+2025-11-05 12:15:23,268 - src.report_generation.report_generator - WARNING - analysis_results为空，添加默认消息
+2025-11-05 12:15:23,269 - src.report_generation.report_generator - INFO - 分析结果添加成功
+2025-11-05 12:15:23,269 - src.report_generation.report_generator - INFO - 无图表需要添加
+2025-11-05 12:15:23,269 - src.report_generation.report_generator - INFO - 添加结论和建议
+2025-11-05 12:15:23,269 - src.report_generation.report_generator - INFO - 开始生成结论和建议
+2025-11-05 12:15:23,269 - src.report_generation.report_generator - DEBUG - 结论类型: <class 'NoneType'>, 内容: None
+2025-11-05 12:15:23,269 - src.report_generation.report_generator - INFO - 没有找到预设结论，生成自动结论
+2025-11-05 12:15:23,269 - src.report_generation.report_generator - DEBUG - 生成的结论文本长度: 53
+2025-11-05 12:15:23,270 - src.report_generation.report_generator - INFO - 结论添加成功
+2025-11-05 12:15:23,270 - src.report_generation.report_generator - INFO - 没有找到预设建议，生成自动建议
+2025-11-05 12:15:23,271 - src.report_generation.report_generator - DEBUG - 最终建议数量: 4
+2025-11-05 12:15:23,276 - src.report_generation.report_generator - INFO - 建议添加成功
+2025-11-05 12:15:23,277 - src.report_generation.report_generator - INFO - 结论和建议添加成功
+2025-11-05 12:15:23,277 - src.report_generation.report_generator - INFO - 开始保存报告
+2025-11-05 12:15:23,291 - src.report_generation.report_generator - INFO - 报告保存成功，路径: /workspaces/ningmeng/AI/temp/test_report_empty_analysis.docx
+2025-11-05 12:15:23,291 - __main__ - INFO - 空analysis_results测试成功，报告保存至: /workspaces/ningmeng/AI/temp/test_report_empty_analysis.docx
+2025-11-05 12:15:23,292 - __main__ - INFO - 测试包含None值的analysis_results
+2025-11-05 12:15:23,292 - src.report_generation.report_generator - INFO - 开始生成完整的数据分析报告
+2025-11-05 12:15:23,292 - src.report_generation.report_generator - INFO - 输入数据类型: <class 'pandas.core.frame.DataFrame'>, 行数: 5
+2025-11-05 12:15:23,292 - src.report_generation.report_generator - INFO - 分析结果键: ['analysis_type', 'descriptive_stats', 'correlation', 'model_recommendations', 'key_findings', 'conclusions', 'recommendations']
+2025-11-05 12:15:23,292 - src.report_generation.report_generator - INFO - 图表类型: <class 'dict'>, 图表数量: 0
+2025-11-05 12:15:23,292 - src.report_generation.report_generator - INFO - 文件信息: {'file_name': 'test_data.csv', 'file_format': 'CSV'}
+2025-11-05 12:15:23,292 - src.report_generation.report_generator - INFO - 创建报告，标题: 数据分析报告 - test_data.csv
+2025-11-05 12:15:23,305 - src.report_generation.report_generator - INFO - 报告文档创建成功
+2025-11-05 12:15:23,305 - src.report_generation.report_generator - INFO - 添加执行摘要
+2025-11-05 12:15:23,305 - src.report_generation.report_generator - INFO - 开始生成执行摘要
+2025-11-05 12:15:23,305 - src.report_generation.report_generator - DEBUG - 数据基本信息: 5 行, 3 列
+2025-11-05 12:15:23,306 - src.report_generation.report_generator - DEBUG - 主要发现类型: <class 'NoneType'>, 内容: None
+2025-11-05 12:15:23,306 - src.report_generation.report_generator - INFO - 没有找到key_findings，尝试从其他分析结果中提取发现
+2025-11-05 12:15:23,307 - src.report_generation.report_generator - DEBUG - 变异最大的特征: B
+2025-11-05 12:15:23,307 - src.report_generation.report_generator - DEBUG - 生成的摘要文本长度: 45
+2025-11-05 12:15:23,308 - src.report_generation.report_generator - INFO - 执行摘要生成完成
+2025-11-05 12:15:23,309 - src.report_generation.report_generator - INFO - 执行摘要添加成功
+2025-11-05 12:15:23,309 - src.report_generation.report_generator - INFO - 添加数据概览
+2025-11-05 12:15:23,327 - src.report_generation.report_generator - INFO - 数据概览添加成功
+2025-11-05 12:15:23,327 - src.report_generation.report_generator - INFO - 添加分析结果
+2025-11-05 12:15:23,327 - src.report_generation.report_generator - INFO - 开始添加分析结果
+2025-11-05 12:15:23,328 - src.report_generation.report_generator - DEBUG - analysis_results keys: ['analysis_type', 'descriptive_stats', 'correlation', 'model_recommendations', 'key_findings', 'conclusions', 'recommendations']
+2025-11-05 12:15:23,329 - src.report_generation.report_generator - INFO - 添加描述性统计
+2025-11-05 12:15:23,330 - src.report_generation.report_generator - DEBUG - stats_df type: <class 'NoneType'>
+2025-11-05 12:15:23,330 - src.report_generation.report_generator - WARNING - 描述性统计数据无效
+2025-11-05 12:15:23,330 - src.report_generation.report_generator - INFO - 添加相关性分析
+2025-11-05 12:15:23,331 - src.report_generation.report_generator - DEBUG - corr_results type: <class 'dict'>, keys: []
+2025-11-05 12:15:23,331 - src.report_generation.report_generator - DEBUG - strong_correlations type: <class 'list'>, length: 0
+2025-11-05 12:15:23,332 - src.report_generation.report_generator - INFO - 相关性分析添加成功
+2025-11-05 12:15:23,332 - src.report_generation.report_generator - INFO - 添加模型推荐
+2025-11-05 12:15:23,332 - src.report_generation.report_generator - DEBUG - recommendations type: <class 'list'>, length: 0
+2025-11-05 12:15:23,333 - src.report_generation.report_generator - INFO - 模型推荐添加成功
+2025-11-05 12:15:23,333 - src.report_generation.report_generator - INFO - 分析结果添加完成
+2025-11-05 12:15:23,333 - src.report_generation.report_generator - INFO - 分析结果添加成功
+2025-11-05 12:15:23,333 - src.report_generation.report_generator - INFO - 无图表需要添加
+2025-11-05 12:15:23,333 - src.report_generation.report_generator - INFO - 添加结论和建议
+2025-11-05 12:15:23,333 - src.report_generation.report_generator - INFO - 开始生成结论和建议
+2025-11-05 12:15:23,334 - src.report_generation.report_generator - DEBUG - 结论类型: <class 'NoneType'>, 内容: None
+2025-11-05 12:15:23,334 - src.report_generation.report_generator - INFO - 没有找到预设结论，生成自动结论
+2025-11-05 12:15:23,334 - src.report_generation.report_generator - DEBUG - 生成的结论文本长度: 102
+2025-11-05 12:15:23,335 - src.report_generation.report_generator - INFO - 结论添加成功
+2025-11-05 12:15:23,335 - src.report_generation.report_generator - INFO - 没有找到预设建议，生成自动建议
+2025-11-05 12:15:23,335 - src.report_generation.report_generator - DEBUG - 最终建议数量: 4
+2025-11-05 12:15:23,342 - src.report_generation.report_generator - INFO - 建议添加成功
+2025-11-05 12:15:23,342 - src.report_generation.report_generator - INFO - 结论和建议添加成功
+2025-11-05 12:15:23,343 - src.report_generation.report_generator - INFO - 开始保存报告
+2025-11-05 12:15:23,357 - src.report_generation.report_generator - INFO - 报告保存成功，路径: /workspaces/ningmeng/AI/temp/test_report_none_values.docx
+2025-11-05 12:15:23,357 - __main__ - INFO - None值analysis_results测试成功，报告保存至: /workspaces/ningmeng/AI/temp/test_report_none_values.docx
+2025-11-05 12:15:23,357 - __main__ - INFO - 所有测试都通过了！
+2025-11-05 12:16:45,888 - __main__ - INFO - 开始测试报告生成功能
+2025-11-05 12:16:45,990 - matplotlib - DEBUG - matplotlib data path: /usr/local/python/3.12.1/lib/python3.12/site-packages/matplotlib/mpl-data
+2025-11-05 12:16:45,995 - matplotlib - DEBUG - CONFIGDIR=/home/codespace/.config/matplotlib
+2025-11-05 12:16:45,996 - matplotlib - DEBUG - interactive is False
+2025-11-05 12:16:45,996 - matplotlib - DEBUG - platform is linux
+2025-11-05 12:16:46,018 - matplotlib - DEBUG - CACHEDIR=/home/codespace/.cache/matplotlib
+2025-11-05 12:16:46,019 - matplotlib.font_manager - DEBUG - Using fontManager instance from /home/codespace/.cache/matplotlib/fontlist-v390.json
+2025-11-05 12:16:46,852 - __main__ - INFO - 创建报告生成器
+2025-11-05 12:16:46,853 - __main__ - INFO - 测试正常情况下的报告生成
+2025-11-05 12:16:46,853 - src.report_generation.report_generator - INFO - 开始生成完整的数据分析报告
+2025-11-05 12:16:46,853 - src.report_generation.report_generator - INFO - 输入数据类型: <class 'pandas.core.frame.DataFrame'>, 行数: 5
+2025-11-05 12:16:46,853 - src.report_generation.report_generator - INFO - 分析结果键: ['analysis_type', 'descriptive_stats', 'correlation', 'model_recommendations', 'key_findings', 'conclusions', 'recommendations']
+2025-11-05 12:16:46,853 - src.report_generation.report_generator - INFO - 图表类型: <class 'dict'>, 图表数量: 0
+2025-11-05 12:16:46,853 - src.report_generation.report_generator - INFO - 文件信息: {'file_name': 'test_data.csv', 'file_format': 'CSV'}
+2025-11-05 12:16:46,853 - src.report_generation.report_generator - INFO - 创建报告，标题: 数据分析报告 - test_data.csv
+2025-11-05 12:16:46,869 - src.report_generation.report_generator - INFO - 报告文档创建成功
+2025-11-05 12:16:46,869 - src.report_generation.report_generator - INFO - 添加执行摘要
+2025-11-05 12:16:46,869 - src.report_generation.report_generator - INFO - 开始生成执行摘要
+2025-11-05 12:16:46,869 - src.report_generation.report_generator - DEBUG - 数据基本信息: 5 行, 3 列
+2025-11-05 12:16:46,869 - src.report_generation.report_generator - DEBUG - 分析类型: 描述性统计分析
+2025-11-05 12:16:46,869 - src.report_generation.report_generator - DEBUG - 主要发现类型: <class 'list'>, 内容: ['数据质量良好', '特征A和B存在强相关性', '无明显异常值']
+2025-11-05 12:16:46,869 - src.report_generation.report_generator - DEBUG - 添加主要发现 1: 数据质量良好
+2025-11-05 12:16:46,869 - src.report_generation.report_generator - DEBUG - 添加主要发现 2: 特征A和B存在强相关性
+2025-11-05 12:16:46,869 - src.report_generation.report_generator - DEBUG - 添加主要发现 3: 无明显异常值
+2025-11-05 12:16:46,870 - src.report_generation.report_generator - DEBUG - 推荐模型: 线性回归
+2025-11-05 12:16:46,870 - src.report_generation.report_generator - DEBUG - 生成的摘要文本长度: 100
+2025-11-05 12:16:46,871 - src.report_generation.report_generator - INFO - 执行摘要生成完成
+2025-11-05 12:16:46,871 - src.report_generation.report_generator - INFO - 执行摘要添加成功
+2025-11-05 12:16:46,871 - src.report_generation.report_generator - INFO - 添加数据概览
+2025-11-05 12:16:46,889 - src.report_generation.report_generator - INFO - 数据概览添加成功
+2025-11-05 12:16:46,890 - src.report_generation.report_generator - INFO - 添加分析结果
+2025-11-05 12:16:46,890 - src.report_generation.report_generator - INFO - 开始添加分析结果
+2025-11-05 12:16:46,892 - src.report_generation.report_generator - DEBUG - analysis_results keys: ['analysis_type', 'descriptive_stats', 'correlation', 'model_recommendations', 'key_findings', 'conclusions', 'recommendations']
+2025-11-05 12:16:46,892 - src.report_generation.report_generator - INFO - 添加描述性统计
+2025-11-05 12:16:46,894 - src.report_generation.report_generator - DEBUG - stats_df type: <class 'pandas.core.frame.DataFrame'>
+2025-11-05 12:16:46,912 - src.report_generation.report_generator - INFO - 描述性统计表格添加成功
+2025-11-05 12:16:46,912 - src.report_generation.report_generator - INFO - 添加相关性分析
+2025-11-05 12:16:46,914 - src.report_generation.report_generator - DEBUG - corr_results type: <class 'dict'>, keys: ['method', 'strong_correlations']
+2025-11-05 12:16:46,914 - src.report_generation.report_generator - DEBUG - strong_correlations type: <class 'list'>, length: 1
+2025-11-05 12:16:46,917 - src.report_generation.report_generator - DEBUG - 添加强相关对: A - B: 0.95
+2025-11-05 12:16:46,917 - src.report_generation.report_generator - INFO - 相关性分析添加成功
+2025-11-05 12:16:46,917 - src.report_generation.report_generator - INFO - 添加模型推荐
+2025-11-05 12:16:46,918 - src.report_generation.report_generator - DEBUG - recommendations type: <class 'list'>, length: 1
+2025-11-05 12:16:46,927 - src.report_generation.report_generator - DEBUG - 添加模型推荐: 线性回归
+2025-11-05 12:16:46,929 - src.report_generation.report_generator - INFO - 模型推荐添加成功
+2025-11-05 12:16:46,929 - src.report_generation.report_generator - INFO - 分析结果添加完成
+2025-11-05 12:16:46,929 - src.report_generation.report_generator - INFO - 分析结果添加成功
+2025-11-05 12:16:46,929 - src.report_generation.report_generator - INFO - 无图表需要添加
+2025-11-05 12:16:46,930 - src.report_generation.report_generator - INFO - 添加结论和建议
+2025-11-05 12:16:46,930 - src.report_generation.report_generator - INFO - 开始生成结论和建议
+2025-11-05 12:16:46,930 - src.report_generation.report_generator - DEBUG - 结论类型: <class 'list'>, 内容: ['数据适合进行回归分析', '建议使用线性模型']
+2025-11-05 12:16:46,930 - src.report_generation.report_generator - DEBUG - 添加结论 1: 数据适合进行回归分析
+2025-11-05 12:16:46,931 - src.report_generation.report_generator - DEBUG - 添加结论 2: 建议使用线性模型
+2025-11-05 12:16:46,931 - src.report_generation.report_generator - DEBUG - 生成的结论文本长度: 47
+2025-11-05 12:16:46,933 - src.report_generation.report_generator - INFO - 结论添加成功
+2025-11-05 12:16:46,934 - src.report_generation.report_generator - DEBUG - 找到 2 个预设建议
+2025-11-05 12:16:46,934 - src.report_generation.report_generator - DEBUG - 最终建议数量: 2
+2025-11-05 12:16:46,940 - src.report_generation.report_generator - INFO - 建议添加成功
+2025-11-05 12:16:46,940 - src.report_generation.report_generator - INFO - 结论和建议添加成功
+2025-11-05 12:16:46,941 - src.report_generation.report_generator - INFO - 开始保存报告
+2025-11-05 12:16:46,965 - src.report_generation.report_generator - INFO - 报告保存成功，路径: /workspaces/ningmeng/AI/temp/test_report_normal.docx
+2025-11-05 12:16:46,966 - __main__ - INFO - 正常情况测试成功，报告保存至: /workspaces/ningmeng/AI/temp/test_report_normal.docx
+2025-11-05 12:16:46,966 - __main__ - INFO - 测试analysis_results为None的情况
+2025-11-05 12:16:46,966 - src.report_generation.report_generator - INFO - 开始生成完整的数据分析报告
+2025-11-05 12:16:46,967 - src.report_generation.report_generator - INFO - 输入数据类型: <class 'pandas.core.frame.DataFrame'>, 行数: 5
+2025-11-05 12:16:46,967 - src.report_generation.report_generator - INFO - 分析结果键: []
+2025-11-05 12:16:46,968 - src.report_generation.report_generator - INFO - 图表类型: <class 'dict'>, 图表数量: 0
+2025-11-05 12:16:46,968 - src.report_generation.report_generator - INFO - 文件信息: {'file_name': 'test_data.csv', 'file_format': 'CSV'}
+2025-11-05 12:16:46,969 - src.report_generation.report_generator - INFO - 创建报告，标题: 数据分析报告 - test_data.csv
+2025-11-05 12:16:46,993 - src.report_generation.report_generator - INFO - 报告文档创建成功
+2025-11-05 12:16:46,993 - src.report_generation.report_generator - INFO - 添加执行摘要
+2025-11-05 12:16:46,993 - src.report_generation.report_generator - INFO - 开始生成执行摘要
+2025-11-05 12:16:46,993 - src.report_generation.report_generator - DEBUG - 数据基本信息: 5 行, 3 列
+2025-11-05 12:16:46,994 - src.report_generation.report_generator - DEBUG - 主要发现类型: <class 'NoneType'>, 内容: None
+2025-11-05 12:16:46,994 - src.report_generation.report_generator - INFO - 没有找到key_findings，尝试从其他分析结果中提取发现
+2025-11-05 12:16:46,994 - src.report_generation.report_generator - DEBUG - 生成的摘要文本长度: 29
+2025-11-05 12:16:46,996 - src.report_generation.report_generator - INFO - 执行摘要生成完成
+2025-11-05 12:16:46,996 - src.report_generation.report_generator - INFO - 执行摘要添加成功
+2025-11-05 12:16:46,996 - src.report_generation.report_generator - INFO - 添加数据概览
+2025-11-05 12:16:47,021 - src.report_generation.report_generator - INFO - 数据概览添加成功
+2025-11-05 12:16:47,022 - src.report_generation.report_generator - INFO - 添加分析结果
+2025-11-05 12:16:47,022 - src.report_generation.report_generator - INFO - 开始添加分析结果
+2025-11-05 12:16:47,023 - src.report_generation.report_generator - WARNING - analysis_results为空，添加默认消息
+2025-11-05 12:16:47,023 - src.report_generation.report_generator - INFO - 分析结果添加成功
+2025-11-05 12:16:47,023 - src.report_generation.report_generator - INFO - 无图表需要添加
+2025-11-05 12:16:47,023 - src.report_generation.report_generator - INFO - 添加结论和建议
+2025-11-05 12:16:47,023 - src.report_generation.report_generator - INFO - 开始生成结论和建议
+2025-11-05 12:16:47,024 - src.report_generation.report_generator - DEBUG - 结论类型: <class 'NoneType'>, 内容: None
+2025-11-05 12:16:47,024 - src.report_generation.report_generator - INFO - 没有找到预设结论，生成自动结论
+2025-11-05 12:16:47,024 - src.report_generation.report_generator - DEBUG - 生成的结论文本长度: 53
+2025-11-05 12:16:47,025 - src.report_generation.report_generator - INFO - 结论添加成功
+2025-11-05 12:16:47,025 - src.report_generation.report_generator - INFO - 没有找到预设建议，生成自动建议
+2025-11-05 12:16:47,025 - src.report_generation.report_generator - DEBUG - 最终建议数量: 4
+2025-11-05 12:16:47,031 - src.report_generation.report_generator - INFO - 建议添加成功
+2025-11-05 12:16:47,031 - src.report_generation.report_generator - INFO - 结论和建议添加成功
+2025-11-05 12:16:47,032 - src.report_generation.report_generator - INFO - 开始保存报告
+2025-11-05 12:16:47,046 - src.report_generation.report_generator - INFO - 报告保存成功，路径: /workspaces/ningmeng/AI/temp/test_report_none_analysis.docx
+2025-11-05 12:16:47,046 - __main__ - INFO - None analysis_results测试成功，报告保存至: /workspaces/ningmeng/AI/temp/test_report_none_analysis.docx
+2025-11-05 12:16:47,046 - __main__ - INFO - 测试空analysis_results的情况
+2025-11-05 12:16:47,046 - src.report_generation.report_generator - INFO - 开始生成完整的数据分析报告
+2025-11-05 12:16:47,046 - src.report_generation.report_generator - INFO - 输入数据类型: <class 'pandas.core.frame.DataFrame'>, 行数: 5
+2025-11-05 12:16:47,046 - src.report_generation.report_generator - INFO - 分析结果键: []
+2025-11-05 12:16:47,047 - src.report_generation.report_generator - INFO - 图表类型: <class 'dict'>, 图表数量: 0
+2025-11-05 12:16:47,047 - src.report_generation.report_generator - INFO - 文件信息: {'file_name': 'test_data.csv', 'file_format': 'CSV'}
+2025-11-05 12:16:47,047 - src.report_generation.report_generator - INFO - 创建报告，标题: 数据分析报告 - test_data.csv
+2025-11-05 12:16:47,060 - src.report_generation.report_generator - INFO - 报告文档创建成功
+2025-11-05 12:16:47,060 - src.report_generation.report_generator - INFO - 添加执行摘要
+2025-11-05 12:16:47,061 - src.report_generation.report_generator - INFO - 开始生成执行摘要
+2025-11-05 12:16:47,061 - src.report_generation.report_generator - DEBUG - 数据基本信息: 5 行, 3 列
+2025-11-05 12:16:47,061 - src.report_generation.report_generator - DEBUG - 主要发现类型: <class 'NoneType'>, 内容: None
+2025-11-05 12:16:47,061 - src.report_generation.report_generator - INFO - 没有找到key_findings，尝试从其他分析结果中提取发现
+2025-11-05 12:16:47,061 - src.report_generation.report_generator - DEBUG - 生成的摘要文本长度: 29
+2025-11-05 12:16:47,062 - src.report_generation.report_generator - INFO - 执行摘要生成完成
+2025-11-05 12:16:47,062 - src.report_generation.report_generator - INFO - 执行摘要添加成功
+2025-11-05 12:16:47,062 - src.report_generation.report_generator - INFO - 添加数据概览
+2025-11-05 12:16:47,079 - src.report_generation.report_generator - INFO - 数据概览添加成功
+2025-11-05 12:16:47,079 - src.report_generation.report_generator - INFO - 添加分析结果
+2025-11-05 12:16:47,079 - src.report_generation.report_generator - INFO - 开始添加分析结果
+2025-11-05 12:16:47,080 - src.report_generation.report_generator - WARNING - analysis_results为空，添加默认消息
+2025-11-05 12:16:47,080 - src.report_generation.report_generator - INFO - 分析结果添加成功
+2025-11-05 12:16:47,080 - src.report_generation.report_generator - INFO - 无图表需要添加
+2025-11-05 12:16:47,081 - src.report_generation.report_generator - INFO - 添加结论和建议
+2025-11-05 12:16:47,081 - src.report_generation.report_generator - INFO - 开始生成结论和建议
+2025-11-05 12:16:47,081 - src.report_generation.report_generator - DEBUG - 结论类型: <class 'NoneType'>, 内容: None
+2025-11-05 12:16:47,081 - src.report_generation.report_generator - INFO - 没有找到预设结论，生成自动结论
+2025-11-05 12:16:47,081 - src.report_generation.report_generator - DEBUG - 生成的结论文本长度: 53
+2025-11-05 12:16:47,082 - src.report_generation.report_generator - INFO - 结论添加成功
+2025-11-05 12:16:47,082 - src.report_generation.report_generator - INFO - 没有找到预设建议，生成自动建议
+2025-11-05 12:16:47,082 - src.report_generation.report_generator - DEBUG - 最终建议数量: 4
+2025-11-05 12:16:47,088 - src.report_generation.report_generator - INFO - 建议添加成功
+2025-11-05 12:16:47,088 - src.report_generation.report_generator - INFO - 结论和建议添加成功
+2025-11-05 12:16:47,088 - src.report_generation.report_generator - INFO - 开始保存报告
+2025-11-05 12:16:47,102 - src.report_generation.report_generator - INFO - 报告保存成功，路径: /workspaces/ningmeng/AI/temp/test_report_empty_analysis.docx
+2025-11-05 12:16:47,102 - __main__ - INFO - 空analysis_results测试成功，报告保存至: /workspaces/ningmeng/AI/temp/test_report_empty_analysis.docx
+2025-11-05 12:16:47,102 - __main__ - INFO - 测试包含None值的analysis_results
+2025-11-05 12:16:47,102 - src.report_generation.report_generator - INFO - 开始生成完整的数据分析报告
+2025-11-05 12:16:47,102 - src.report_generation.report_generator - INFO - 输入数据类型: <class 'pandas.core.frame.DataFrame'>, 行数: 5
+2025-11-05 12:16:47,102 - src.report_generation.report_generator - INFO - 分析结果键: ['analysis_type', 'descriptive_stats', 'correlation', 'model_recommendations', 'key_findings', 'conclusions', 'recommendations']
+2025-11-05 12:16:47,103 - src.report_generation.report_generator - INFO - 图表类型: <class 'dict'>, 图表数量: 0
+2025-11-05 12:16:47,103 - src.report_generation.report_generator - INFO - 文件信息: {'file_name': 'test_data.csv', 'file_format': 'CSV'}
+2025-11-05 12:16:47,103 - src.report_generation.report_generator - INFO - 创建报告，标题: 数据分析报告 - test_data.csv
+2025-11-05 12:16:47,117 - src.report_generation.report_generator - INFO - 报告文档创建成功
+2025-11-05 12:16:47,117 - src.report_generation.report_generator - INFO - 添加执行摘要
+2025-11-05 12:16:47,117 - src.report_generation.report_generator - INFO - 开始生成执行摘要
+2025-11-05 12:16:47,117 - src.report_generation.report_generator - DEBUG - 数据基本信息: 5 行, 3 列
+2025-11-05 12:16:47,118 - src.report_generation.report_generator - DEBUG - 主要发现类型: <class 'NoneType'>, 内容: None
+2025-11-05 12:16:47,118 - src.report_generation.report_generator - INFO - 没有找到key_findings，尝试从其他分析结果中提取发现
+2025-11-05 12:16:47,119 - src.report_generation.report_generator - DEBUG - 变异最大的特征: B
+2025-11-05 12:16:47,119 - src.report_generation.report_generator - DEBUG - 生成的摘要文本长度: 45
+2025-11-05 12:16:47,120 - src.report_generation.report_generator - INFO - 执行摘要生成完成
+2025-11-05 12:16:47,121 - src.report_generation.report_generator - INFO - 执行摘要添加成功
+2025-11-05 12:16:47,121 - src.report_generation.report_generator - INFO - 添加数据概览
+2025-11-05 12:16:47,139 - src.report_generation.report_generator - INFO - 数据概览添加成功
+2025-11-05 12:16:47,139 - src.report_generation.report_generator - INFO - 添加分析结果
+2025-11-05 12:16:47,139 - src.report_generation.report_generator - INFO - 开始添加分析结果
+2025-11-05 12:16:47,140 - src.report_generation.report_generator - DEBUG - analysis_results keys: ['analysis_type', 'descriptive_stats', 'correlation', 'model_recommendations', 'key_findings', 'conclusions', 'recommendations']
+2025-11-05 12:16:47,140 - src.report_generation.report_generator - INFO - 添加描述性统计
+2025-11-05 12:16:47,141 - src.report_generation.report_generator - DEBUG - stats_df type: <class 'NoneType'>
+2025-11-05 12:16:47,141 - src.report_generation.report_generator - WARNING - 描述性统计数据无效
+2025-11-05 12:16:47,141 - src.report_generation.report_generator - INFO - 添加相关性分析
+2025-11-05 12:16:47,143 - src.report_generation.report_generator - DEBUG - corr_results type: <class 'dict'>, keys: []
+2025-11-05 12:16:47,143 - src.report_generation.report_generator - DEBUG - strong_correlations type: <class 'list'>, length: 0
+2025-11-05 12:16:47,143 - src.report_generation.report_generator - INFO - 相关性分析添加成功
+2025-11-05 12:16:47,143 - src.report_generation.report_generator - INFO - 添加模型推荐
+2025-11-05 12:16:47,143 - src.report_generation.report_generator - DEBUG - recommendations type: <class 'list'>, length: 0
+2025-11-05 12:16:47,144 - src.report_generation.report_generator - INFO - 模型推荐添加成功
+2025-11-05 12:16:47,145 - src.report_generation.report_generator - INFO - 分析结果添加完成
+2025-11-05 12:16:47,145 - src.report_generation.report_generator - INFO - 分析结果添加成功
+2025-11-05 12:16:47,145 - src.report_generation.report_generator - INFO - 无图表需要添加
+2025-11-05 12:16:47,145 - src.report_generation.report_generator - INFO - 添加结论和建议
+2025-11-05 12:16:47,145 - src.report_generation.report_generator - INFO - 开始生成结论和建议
+2025-11-05 12:16:47,145 - src.report_generation.report_generator - DEBUG - 结论类型: <class 'NoneType'>, 内容: None
+2025-11-05 12:16:47,145 - src.report_generation.report_generator - INFO - 没有找到预设结论，生成自动结论
+2025-11-05 12:16:47,145 - src.report_generation.report_generator - DEBUG - 生成的结论文本长度: 102
+2025-11-05 12:16:47,147 - src.report_generation.report_generator - INFO - 结论添加成功
+2025-11-05 12:16:47,147 - src.report_generation.report_generator - INFO - 没有找到预设建议，生成自动建议
+2025-11-05 12:16:47,147 - src.report_generation.report_generator - DEBUG - 最终建议数量: 4
+2025-11-05 12:16:47,153 - src.report_generation.report_generator - INFO - 建议添加成功
+2025-11-05 12:16:47,154 - src.report_generation.report_generator - INFO - 结论和建议添加成功
+2025-11-05 12:16:47,154 - src.report_generation.report_generator - INFO - 开始保存报告
+2025-11-05 12:16:47,167 - src.report_generation.report_generator - INFO - 报告保存成功，路径: /workspaces/ningmeng/AI/temp/test_report_none_values.docx
+2025-11-05 12:16:47,167 - __main__ - INFO - None值analysis_results测试成功，报告保存至: /workspaces/ningmeng/AI/temp/test_report_none_values.docx
+2025-11-05 12:16:47,167 - __main__ - INFO - 所有测试都通过了！
