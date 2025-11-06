@@ -1261,7 +1261,7 @@ class AdvancedReportGenerator:
     支持AI大模型增强功能
     """
     
-    def __init__(self, ai_enhancer: Optional[AIReportEnhancer] = None):
+    def __init__(self, ai_enhancer: Optional['AIReportEnhancer'] = None):
         self.generator = ReportGenerator()
         self.ai_enhancer = ai_enhancer
         
@@ -1275,7 +1275,7 @@ class AdvancedReportGenerator:
                 logger.warning(f"无法创建默认AI增强器: {str(e)}")
                 self.ai_enhancer = None
     
-    def set_ai_enhancer(self, ai_enhancer: AIReportEnhancer):
+    def set_ai_enhancer(self, ai_enhancer: 'AIReportEnhancer'):
         """设置AI增强器"""
         self.ai_enhancer = ai_enhancer
         logger.info("AI报告增强器已设置")
