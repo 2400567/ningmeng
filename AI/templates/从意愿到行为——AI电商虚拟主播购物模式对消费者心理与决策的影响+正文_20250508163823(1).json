@@ -1,0 +1,41 @@
+{
+  "name": "从意愿到行为——AI电商虚拟主播购物模式对消费者心理与决策的影响+正文_20250508163823(1)",
+  "description": "从PDF文件 从意愿到行为——AI电商虚拟主播购物模式对消费者心理与决策的影响+正文_20250508163823(1).pdf 自动解析的分析模板",
+  "template_type": "technology_acceptance",
+  "variables": [
+    "BI",
+    "H1",
+    "H2",
+    "H3",
+    "H4",
+    "H5",
+    "H6",
+    "H7",
+    "H8",
+    "H9",
+    "PGFIPNFIPCFISRMRRMSEA90",
+    "Q1",
+    "Q2",
+    "Q3",
+    "Q4",
+    "Q5",
+    "UTAUT2",
+    "VI2"
+  ],
+  "analysis_steps": [
+    {
+      "step_name": "描述性统计",
+      "method": "descriptive_statistics",
+      "parameters": {}
+    },
+    {
+      "step_name": "主要分析",
+      "method": "technology_acceptance",
+      "parameters": {}
+    }
+  ],
+  "output_format": {
+    "format": "academic_report"
+  },
+  "created_at": "2025-11-06T10:37:54.997657"
+}

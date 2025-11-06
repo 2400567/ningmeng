@@ -10,9 +10,11 @@ import pandas as pd
 import numpy as np
 import sys
 import os
+import json
 from pathlib import Path
 import logging
 from typing import Dict, List, Any, Optional, Tuple
+import datetime as dt
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -34,6 +36,10 @@ try:
     
     # 导入题项变量映射系统
     from item_variable_mapper import ItemVariableMapper, create_item_mapping_interface
+    # 引入自动错误捕获装饰器
+    from auto_issue_reporter import ai_error_guard
+    # 引用错误日志目录 (若后续需要跨模块拓展)
+    from auto_issue_reporter import REPORT_DIR as _REPORT_DIR  # noqa: F401
     
     logger.info("所有模块导入成功")
 except ImportError as e:
@@ -115,6 +121,8 @@ def initialize_session_state():
     """初始化会话状态"""
     if 'workflow_step' not in st.session_state:
         st.session_state.workflow_step = 1
+    if 'view_mode' not in st.session_state:
+        st.session_state.view_mode = '工作流'
     
     if 'template_uploaded' not in st.session_state:
         st.session_state.template_uploaded = False
@@ -189,6 +197,7 @@ def render_workflow_progress():
                 </div>
                 """, unsafe_allow_html=True)
 
+@ai_error_guard("STEP_1_TEMPLATE_UPLOAD")
 def render_step_1_template_upload():
     """步骤1: 模板上传"""
     st.markdown("""
@@ -311,6 +320,7 @@ def render_step_1_template_upload():
         if st.button("🚀 继续下一步", type="primary"):
             st.rerun()
 
+@ai_error_guard("STEP_2_DATA_UPLOAD")
 def render_step_2_data_upload():
     """步骤2: 数据上传"""
     if not st.session_state.template_uploaded:
@@ -586,6 +596,7 @@ def render_step_2_data_upload():
                 st.session_state.workflow_step = 2
                 st.rerun()
 
+@ai_error_guard("STEP_3_VARIABLE_MERGING")
 def render_step_3_variable_merging():
     """步骤3: 变量合并"""
     if not st.session_state.data_uploaded:
@@ -666,6 +677,7 @@ def render_step_3_variable_merging():
         if st.button("🚀 继续AI分析", type="primary"):
             st.rerun()
 
+@ai_error_guard("STEP_4_AI_ANALYSIS")
 def render_step_4_ai_analysis():
     """步骤4: AI分析"""
     if not st.session_state.variables_merged:
@@ -713,6 +725,7 @@ def render_step_4_ai_analysis():
         if st.button("🚀 查看分析结果", type="primary"):
             st.rerun()
 
+@ai_error_guard("STEP_5_RESULTS_DISPLAY")
 def render_step_5_results_display():
     """步骤5: 结果展示"""
     if not st.session_state.analysis_completed:
@@ -758,6 +771,7 @@ def render_step_5_results_display():
         st.session_state.workflow_step = 6
         st.rerun()
 
+@ai_error_guard("STEP_6_REPORT_GENERATION")
 def render_step_6_report_generation():
     """步骤6: 报告生成"""
     if not st.session_state.analysis_completed:
@@ -801,9 +815,17 @@ def render_sidebar():
     """渲染侧边栏"""
     with st.sidebar:
         st.markdown("## 🎛️ 控制面板")
+        # 视图模式
+        st.markdown("### 🔀 视图模式")
+        vm = st.radio("选择视图", ["工作流", "错误日志查看器"], index=0 if st.session_state.get('view_mode','工作流')=='工作流' else 1)
+        st.session_state.view_mode = vm
+        st.markdown("---")
         
         # 工作流控制
         st.markdown("### 📋 工作流控制")
+        if st.session_state.view_mode != '工作流':
+            st.info("当前处于错误日志查看模式，上方切换回工作流继续操作。")
+            return
         
         step_options = [
             "1️⃣ 模板上传",
@@ -879,6 +901,132 @@ def render_sidebar():
             - 数据格式需与模板匹配
             """)
 
+@ai_error_guard("ERROR_LOG_VIEWER")
+def render_error_log_viewer():
+    """错误日志查看器: 从 error_reports/error_log.jsonl 解析并提供过滤/查看/下载"""
+    log_file = Path(__file__).parent / 'error_reports' / 'error_log.jsonl'
+    sug_file = Path(__file__).parent / 'error_reports' / 'ai_suggestions.jsonl'
+
+    st.markdown('<h2>🪵 错误日志查看器</h2>', unsafe_allow_html=True)
+    if not log_file.exists() or log_file.stat().st_size == 0:
+        st.info("暂无日志。触发异常后再查看。")
+        return
+
+    records: List[Dict[str, Any]] = []
+    with log_file.open('r', encoding='utf-8') as f:
+        for line in f:
+            line=line.strip()
+            if not line:
+                continue
+            try:
+                records.append(json.loads(line))
+            except Exception:
+                continue
+    if not records:
+        st.warning("日志存在但无法解析。")
+        return
+
+    df = pd.DataFrame(records)
+    if 'timestamp_utc' in df.columns:
+        df['timestamp_dt'] = pd.to_datetime(df['timestamp_utc'], errors='coerce')
+    else:
+        df['timestamp_dt'] = pd.NaT
+
+    # 过滤控件
+    with st.expander('🔍 过滤与搜索', expanded=True):
+        cols = st.columns(4)
+        with cols[0]:
+            secs = sorted(df['section'].dropna().unique().tolist())
+            selected_secs = st.multiselect('Section过滤', secs, default=secs)
+        with cols[1]:
+            min_t = df['timestamp_dt'].min(); max_t = df['timestamp_dt'].max()
+            if pd.isna(min_t) or pd.isna(max_t):
+                start_end = (dt.datetime.utcnow()-dt.timedelta(hours=1), dt.datetime.utcnow())
+            else:
+                start_end = (min_t.to_pydatetime(), max_t.to_pydatetime())
+            time_range = st.slider('时间范围', value=start_end)
+        with cols[2]:
+            search = st.text_input('搜索(类型/消息/trace)')
+        with cols[3]:
+            limit = st.number_input('显示上限', min_value=10, max_value=1000, value=200, step=10)
+
+    view_df = df[df['section'].isin(selected_secs)]
+    start_dt, end_dt = time_range
+    view_df = view_df[(view_df['timestamp_dt'] >= start_dt) & (view_df['timestamp_dt'] <= end_dt)]
+    if search:
+        mask = view_df['error_message'].fillna('').str.contains(search, case=False) | \
+               view_df['error_type'].fillna('').str.contains(search, case=False) | \
+               view_df.get('traceback', pd.Series(['']*len(view_df))).fillna('').str.contains(search, case=False)
+        view_df = view_df[mask]
+    view_df = view_df.sort_values('timestamp_dt', ascending=False).head(limit)
+
+    colA, colB, colC, colD = st.columns(4)
+    with colA: st.metric('总错误数', len(df))
+    with colB: st.metric('筛选后', len(view_df))
+    with colC: st.metric('Section数', view_df['section'].nunique())
+    with colD:
+        last_t = df['timestamp_dt'].max()
+        with_val = last_t.strftime('%Y-%m-%d %H:%M:%S') if pd.notna(last_t) else '-'
+        st.metric('最新时间', with_val)
+
+    with st.expander('📊 Section分布', expanded=False):
+        freq = df['section'].value_counts().reset_index()
+        freq.columns = ['section','count']
+        st.dataframe(freq, use_container_width=True)
+
+    # AI建议映射
+    suggestions = {}
+    if sug_file.exists():
+        with sug_file.open('r', encoding='utf-8') as sf:
+            for line in sf:
+                line=line.strip()
+                if not line: continue
+                try:
+                    rec = json.loads(line)
+                    key=(rec.get('section'), rec.get('error_type'))
+                    suggestions.setdefault(key, []).append(rec.get('suggestion'))
+                except Exception:
+                    pass
+    if suggestions:
+        with st.expander('🧠 AI建议汇总', expanded=False):
+            for (sec, et), slist in suggestions.items():
+                st.markdown(f"**{sec} | {et}**")
+                for s in slist[-3:]:
+                    st.write(f"- {s}")
+
+    st.markdown('---')
+    st.markdown('### 🧾 日志详情')
+    for _, row in view_df.iterrows():
+        header = f"{row.get('timestamp_utc','')} | {row.get('section','')} | {row.get('error_type','')} - {str(row.get('error_message',''))[:70]}"
+        with st.expander(header, expanded=False):
+            c1, c2, c3 = st.columns(3)
+            with c1: st.write(f"**Type:** {row.get('error_type')}")
+            with c2: st.write(f"**Section:** {row.get('section')}")
+            with c3: st.write(f"**Location:** {str(row.get('location_hint',''))[:55]}")
+            st.write(f"**Message:** {row.get('error_message')}")
+            if row.get('traceback'):
+                st.code(row['traceback'], language='python')
+            if row.get('context'):
+                st.json(row['context'])
+            key = (row.get('section'), row.get('error_type'))
+            if key in suggestions:
+                st.markdown('**AI建议:**')
+                for s in suggestions[key][-3:]:
+                    st.write(f"- {s}")
+
+    st.markdown('---')
+    colx, coly, colz = st.columns(3)
+    with colx:
+        st.download_button('📥 下载日志', data=log_file.read_bytes(), file_name='error_log.jsonl', mime='application/json')
+    with coly:
+        if st.button('🧹 清空日志'):
+            log_file.write_text('', encoding='utf-8')
+            st.success('已清空')
+            st.experimental_rerun()
+    with colz:
+        if st.button('🔄 刷新'):
+            st.experimental_rerun()
+
 def main():
     """主函数"""
     # 添加调试和重置功能到侧边栏
@@ -927,26 +1075,25 @@ def main():
     # 渲染侧边栏
     render_sidebar()
     
-    # 工作流进度
-    render_workflow_progress()
-    
-    st.markdown("---")
-    
-    # 根据当前步骤渲染界面
-    current_step = st.session_state.workflow_step
-    
-    if current_step == 1:
-        render_step_1_template_upload()
-    elif current_step == 2:
-        render_step_2_data_upload()
-    elif current_step == 3:
-        render_step_3_variable_merging()
-    elif current_step == 4:
-        render_step_4_ai_analysis()
-    elif current_step == 5:
-        render_step_5_results_display()
-    elif current_step == 6:
-        render_step_6_report_generation()
+    if st.session_state.get('view_mode') == '错误日志查看器':
+        render_error_log_viewer()
+    else:
+        # 工作流进度
+        render_workflow_progress()
+        st.markdown("---")
+        current_step = st.session_state.workflow_step
+        if current_step == 1:
+            render_step_1_template_upload()
+        elif current_step == 2:
+            render_step_2_data_upload()
+        elif current_step == 3:
+            render_step_3_variable_merging()
+        elif current_step == 4:
+            render_step_4_ai_analysis()
+        elif current_step == 5:
+            render_step_5_results_display()
+        elif current_step == 6:
+            render_step_6_report_generation()
     
     # 页脚
     st.markdown("---")

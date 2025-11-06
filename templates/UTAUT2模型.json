@@ -1,0 +1,54 @@
+{
+  "name": "UTAUT2模型",
+  "description": "统一技术接受与使用理论2.0模型分析",
+  "template_type": "structural_equation",
+  "variables": [
+    "performance_expectancy",
+    "effort_expectancy",
+    "social_influence",
+    "facilitating_conditions",
+    "hedonic_motivation",
+    "price_value",
+    "habit",
+    "behavioral_intention",
+    "use_behavior"
+  ],
+  "analysis_steps": [
+    {
+      "step_name": "描述性统计",
+      "method": "descriptive_stats",
+      "parameters": {
+        "include_all": true
+      }
+    },
+    {
+      "step_name": "信度分析",
+      "method": "reliability_analysis",
+      "parameters": {
+        "alpha_threshold": 0.7
+      }
+    },
+    {
+      "step_name": "效度分析",
+      "method": "validity_analysis",
+      "parameters": {
+        "kmo_threshold": 0.7
+      }
+    },
+    {
+      "step_name": "结构方程建模",
+      "method": "structural_equation_modeling",
+      "parameters": {
+        "estimation": "ML",
+        "bootstrap": 1000
+      }
+    }
+  ],
+  "output_format": {
+    "tables": true,
+    "charts": true,
+    "ai_analysis": true,
+    "format": "spssau_style"
+  },
+  "created_at": "2025-11-06 12:00:00"
+}
