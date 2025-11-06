@@ -7,6 +7,9 @@ streamlit==1.33.0
 plotly==5.18.0
 scikit-learn==1.4.1
 
+# PDF处理
+PyPDF2>=3.0.0
+
 # AI大模型依赖
 openai==2.7.1
 requests>=2.31.0

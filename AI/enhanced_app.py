@@ -958,4 +958,13 @@ def main():
     """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
-    main()
+    # 集成自动错误上报包装
+    try:
+        from auto_issue_reporter import AutoIssueReporter
+        AutoIssueReporter.run_with_capture(main, "MAIN_ENTRY")
+    except Exception as e:  # noqa: BLE001
+        # 如果上报模块自身异常，回退直接执行
+        import traceback
+        print("[AutoIssueReporter Fallback]", e)
+        print(traceback.format_exc())
+        main()
