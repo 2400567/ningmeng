@@ -5,7 +5,7 @@ matplotlib==3.8.3
 seaborn==0.13.2
 streamlit==1.33.0
 plotly==5.18.0
-scikit-learn==1.4.1
+scikit-learn==1.4.2  # 1.4.1 无 Py3.12 轮子，升级到兼容版本
 
 # PDF处理
 PyPDF2>=3.0.0
@@ -28,12 +28,13 @@ xlrd==2.0.1
 xlsxwriter==3.1.9
 
 # 日志和调试
-logging==0.5.1.2
+# 标准库 logging 无需安装；移除错误的 PyPI 占位包
 
 # 机器学习模型
-xgboost==2.0.3
-lightgbm==4.3.0
-catboost==1.2
+# 机器学习模型（可选：暂时注释以加快基础环境安装；聚类等核心功能使用 sklearn即可）
+# xgboost==2.0.3
+# lightgbm==4.3.0
+# catboost==1.2
 
 # 时间序列分析
 statsmodels==0.14.1
@@ -48,14 +49,14 @@ altair==5.2.0
 folium==0.16.0
 wordcloud==1.9.3
 
-# AI和NLP工具
-tensorflow==2.15.0
-pytorch==2.2.0
+# AI和NLP工具 (可选, 为加快基础运行已注释不必要/大体积依赖)
+# 若需要深度学习/文本分析功能可按需取消注释并使用兼容版本
+# tensorflow==2.16.1  # 2.15 对 Python 3.12 支持不完整，升级到 2.16.x（可选）
+# torch==2.2.0        # 原来写作 pytorch，正确包名为 torch（可选）
 spacy==3.7.4
 nltk==3.8.1
 
-# 工具类
-yaml==6.0.1
-pydantic==2.5.2
+# 工具类（修正 yaml -> PyYAML，移除重复/旧版本冲突）
+PyYAML==6.0.1
+# 已在上方固定 pydantic==2.12.4 与 tqdm==4.67.1，这里删除重复旧版本
 pydantic-settings==2.1.0
-tqdm==4.66.1

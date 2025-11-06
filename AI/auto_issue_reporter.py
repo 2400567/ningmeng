@@ -22,9 +22,15 @@ import json
 import traceback
 import datetime as _dt
 from pathlib import Path
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Callable, Dict, Optional, List
 import threading
 import hashlib
+import time
+
+try:
+    import requests  # 轻量 HTTP 客户端
+except Exception:  # 若环境未装 requests，后续调用将自动降级
+    requests = None  # type: ignore
 
 REPORT_DIR = Path(__file__).parent / "error_reports"
 REPORT_DIR.mkdir(exist_ok=True)
@@ -34,8 +40,23 @@ STATE_CACHE_FILE = REPORT_DIR / "sent_cache.json"
 _LOCK = threading.Lock()
 
 class AutoIssueReporter:
-    """自动错误捕获与上报"""
+    """自动错误捕获与上报 (带通义AI诊断集成)"""
     dedup_window_minutes = 15
+
+    # ---- 外部AI调用配置 (可通过环境变量覆盖) ----
+    ai_timeout = int(os.getenv('TONGYI_API_TIMEOUT', '15'))
+    ai_retries = int(os.getenv('TONGYI_API_RETRIES', '2'))
+    ai_model = os.getenv('TONGYI_MODEL', 'qwen-turbo')
+    # 兼容 OpenAI 接口模式（DashScope 提供兼容端点）或官方老端点
+    ai_endpoint = os.getenv(
+        'TONGYI_API_URL',
+        # 优先尝试兼容模式（OpenAI 风格）
+        'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions'
+    )
+    # 最大 trace 发送行数，避免上传过长内容
+    max_trace_lines = int(os.getenv('TONGYI_TRACE_LINES', '25'))
+    # 是否只发送摘要而非完整 trace
+    partial_trace = os.getenv('TONGYI_PARTIAL_TRACE', '1') == '1'
 
     @classmethod
     def _load_sent_cache(cls) -> Dict[str, str]:
@@ -117,24 +138,119 @@ class AutoIssueReporter:
 
     @classmethod
     def _attempt_external_ai(cls, record: Dict[str, Any]):
-        # 占位: 通义 API 调用逻辑
+        """调用通义(或兼容)模型获取诊断建议.
+
+        调用条件:
+        - 环境变量 TONGYI_API_KEY 存在
+        - requests 可用
+        - 失败自动重试 (ai_retries)
+
+        失败降级: 写入 placeholder 建议，不抛异常。
+        """
         api_key = os.environ.get('TONGYI_API_KEY')
-        if not api_key:
-            # 没有密钥，跳过外部发送
-            return
-        # 这里保留可扩展结构；实际调用需接入正式SDK或HTTP.
-        # 示例(伪代码):
-        # response = requests.post(url, headers={'Authorization': f'Bearer {api_key}'}, json={'error': record})
-        # 保存AI建议
+        if not api_key or requests is None:
+            return  # 无密钥或无requests直接跳过
+
+        # 构造压缩 trace
+        tb = record.get('traceback', '') or ''
+        trace_lines = tb.splitlines()
+        if cls.partial_trace and len(trace_lines) > cls.max_trace_lines:
+            head = trace_lines[: cls.max_trace_lines]
+            tb_compact = '\n'.join(head) + f"\n... (truncated {len(trace_lines)-cls.max_trace_lines} lines)"
+        else:
+            tb_compact = tb
+
+        prompt = cls._build_prompt(record, tb_compact)
+        payload = {
+            'model': cls.ai_model,
+            'messages': [
+                {'role': 'system', 'content': '你是资深Python错误诊断助手，请输出简明可执行的修复建议，必要时给出代码片段。'},
+                {'role': 'user', 'content': prompt}
+            ],
+            'temperature': 0.2,
+            'top_p': 0.9,
+        }
+        headers = {
+            'Authorization': f'Bearer {api_key}',
+            'Content-Type': 'application/json'
+        }
+
+        suggestion_text = None
+        last_error = None
+        for attempt in range(1, cls.ai_retries + 2):  # 初次 + 重试次数
+            try:
+                resp = requests.post(
+                    cls.ai_endpoint,
+                    headers=headers,
+                    json=payload,
+                    timeout=cls.ai_timeout,
+                )
+                if resp.status_code == 200:
+                    data = resp.json()
+                    # 兼容 OpenAI-style 返回
+                    suggestion_text = cls._extract_message(data)
+                    if suggestion_text:
+                        break
+                    else:
+                        last_error = 'empty_content'
+                else:
+                    last_error = f"status_{resp.status_code}"
+            except Exception as e:  # 网络/超时
+                last_error = f"exception:{type(e).__name__}:{e}"
+            # 退避等待
+            time.sleep(min(2 ** (attempt - 1), 5))
+
+        if not suggestion_text:
+            suggestion_text = f"(调用失败: {last_error or 'unknown'}) 占位: 建议查看错误类型 {record.get('error_type')} 与上下文。"  # 回退
+
+        # 写入建议文件
         suggestion_file = REPORT_DIR / 'ai_suggestions.jsonl'
-        ai_placeholder = {
-            'error_type': record['error_type'],
-            'section': record['section'],
-            'suggestion': '占位: 此处应返回通义大模型的诊断与修复建议。',
+        ai_entry = {
+            'timestamp_utc': _dt.datetime.utcnow().isoformat(),
+            'error_type': record.get('error_type'),
+            'section': record.get('section'),
+            'model': cls.ai_model,
+            'endpoint': cls.ai_endpoint,
+            'suggestion': suggestion_text,
         }
         with _LOCK:
             with suggestion_file.open('a', encoding='utf-8') as f:
-                f.write(json.dumps(ai_placeholder, ensure_ascii=False) + '\n')
+                f.write(json.dumps(ai_entry, ensure_ascii=False) + '\n')
+
+    @classmethod
+    def _build_prompt(cls, record: Dict[str, Any], tb_compact: str) -> str:
+        return (
+            "请分析以下后端运行错误并给出: (1) 问题根因推断 (2) 立即可尝试的修复步骤 (3) 如果涉及数据/状态, 给出验证建议。\n"
+            f"Section: {record.get('section')}\n"
+            f"ErrorType: {record.get('error_type')}\n"
+            f"Message: {record.get('error_message')}\n"
+            f"LocationHint: {record.get('location_hint')}\n"
+            f"Context: {json.dumps(record.get('context') or {}, ensure_ascii=False)[:800]}\n"
+            "Traceback (可能被截断):\n" + tb_compact
+        )
+
+    @classmethod
+    def _extract_message(cls, data: Dict[str, Any]) -> Optional[str]:
+        # OpenAI style: choices[0].message.content
+        try:
+            choices = data.get('choices')
+            if isinstance(choices, list) and choices:
+                msg = choices[0].get('message')
+                if isinstance(msg, dict):
+                    content = msg.get('content')
+                    if isinstance(content, str) and content.strip():
+                        return content.strip()
+        except Exception:
+            return None
+        # 兼容其他格式: data['output']['text'] 或 data['text']
+        for key in ('output', 'text', 'result'):
+            if key in data:
+                val = data[key]
+                if isinstance(val, dict) and 'text' in val:
+                    return str(val['text']).strip()
+                if isinstance(val, str):
+                    return val.strip()
+        return None
 
     @classmethod
     def run_with_capture(cls, func: Callable[[], Any], section: str, context_provider: Optional[Callable[[], Dict[str, Any]]] = None):
