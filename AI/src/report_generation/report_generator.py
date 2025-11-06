@@ -13,6 +13,8 @@ import tempfile
 import matplotlib.pyplot as plt
 import seaborn as sns
 import logging
+from typing import Optional
+from src.ai_agent.ai_report_enhancer import AIReportEnhancer
 
 # 模块级日志器
 logger = logging.getLogger(__name__)
