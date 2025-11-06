@@ -1,6 +1,6 @@
 streamlit
 matplotlib
-pandas
+熊猫
 numpy
 seaborn
 plotly
@@ -29,3 +29,4 @@ duckdb
 ibis-framework
 narwhals
 python-docx
+PyPDF2
