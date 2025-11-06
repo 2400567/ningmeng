@@ -1,3 +1,5 @@
+from typing import Optional
+from src.ai_agent.ai_report_enhancer import AIReportEnhancer
 import os
 import io
 import datetime
@@ -13,23 +15,22 @@ import tempfile
 import matplotlib.pyplot as plt
 import seaborn as sns
 import logging
-from typing import Optional
-from src.ai_agent.ai_report_enhancer import AIReportEnhancer
+
 
 # 模块级日志器
 logger = logging.getLogger (__name__)
 logger.addHandler(logging.NullHandler())
 
 # 导入AI增强模块
-试一试:
-从. . ai_agent。ai_report_enhancer导入AIReportEnhancer， create_ai_enhancer, DEFAULT_CONFIGS
-    AI_ENHANCEMENT_AVAILABLE = 真正的
-除了ImportError:
-    AI_ENHANCEMENT_AVAILABLE = 假
-    logger.警告("AI报告增强模块不可用，将跳过AI增强功能")
+try:
+    from ..ai_agent.ai_report_enhancer import AIReportEnhancer, create_ai_enhancer, DEFAULT_CONFIGS
+    AI_ENHANCEMENT_AVAILABLE = True
+except ImportError:
+    AI_ENHANCEMENT_AVAILABLE = False
+    logger.warning("AI报告增强模块不可用，将跳过AI增强功能")
 
 
-类ReportGenerator:
+class ReportGenerator:
     """
     Word报告生成器，用于创建专业的数据报告文档
     """

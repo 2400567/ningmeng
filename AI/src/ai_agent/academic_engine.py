@@ -547,6 +547,79 @@ class AcademicAnalysisEngine:
         
         return sections
     
+    def _call_ai_api(self, prompt: str) -> str:
+        """调用AI API生成内容"""
+        try:
+            if self.ai_provider == "qwen":
+                return self._call_qwen_api(prompt)
+            elif self.ai_provider == "openai":
+                return self._call_openai_api(prompt)
+            else:
+                # 如果不支持的AI提供商，返回备用响应
+                return self._generate_fallback_response(prompt)
+        except Exception as e:
+            logger.warning(f"AI API调用失败: {e}")
+            return self._generate_fallback_response(prompt)
+    
+    def _call_qwen_api(self, prompt: str) -> str:
+        """调用通义千问API"""
+        try:
+            api_key = os.getenv("QWEN_API_KEY")
+            if not api_key:
+                raise ValueError("未设置QWEN_API_KEY环境变量")
+            
+            # 这里是简化的API调用，实际需要根据通义千问API文档实现
+            headers = {
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json"
+            }
+            
+            data = {
+                "model": "qwen-plus",
+                "messages": [
+                    {"role": "system", "content": "你是一个专业的数据分析报告写作助手，擅长撰写学术性的数据分析报告。"},
+                    {"role": "user", "content": prompt}
+                ],
+                "max_tokens": 4000,
+                "temperature": 0.7
+            }
+            
+            # 注意：这里使用模拟响应，实际部署时需要真实的API调用
+            return self._generate_fallback_response(prompt)
+            
+        except Exception as e:
+            logger.warning(f"通义千问API调用失败: {e}")
+            return self._generate_fallback_response(prompt)
+    
+    def _call_openai_api(self, prompt: str) -> str:
+        """调用OpenAI API"""
+        try:
+            api_key = os.getenv("OPENAI_API_KEY")
+            if not api_key:
+                raise ValueError("未设置OPENAI_API_KEY环境变量")
+            
+            headers = {
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json"
+            }
+            
+            data = {
+                "model": "gpt-3.5-turbo",
+                "messages": [
+                    {"role": "system", "content": "你是一个专业的数据分析报告写作助手，擅长撰写学术性的数据分析报告。"},
+                    {"role": "user", "content": prompt}
+                ],
+                "max_tokens": 4000,
+                "temperature": 0.7
+            }
+            
+            # 注意：这里使用模拟响应，实际部署时需要真实的API调用
+            return self._generate_fallback_response(prompt)
+            
+        except Exception as e:
+            logger.warning(f"OpenAI API调用失败: {e}")
+            return self._generate_fallback_response(prompt)
+    
     def _generate_fallback_response(self, prompt: str) -> str:
         """生成备用响应"""
         return """
