@@ -1,35 +1,35 @@
-import os
-import io
-import datetime
-import pandas as pd
-import numpy as np
-from typing import Dict, List, Optional, Union
-from docx import Document
-from docx.shared import Inches, Pt, RGBColor
-from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK
-from docx.enum.table import WD_TABLE_ALIGNMENT, WD_ALIGN_VERTICAL
-from matplotlib.figure import Figure
-import tempfile
-import matplotlib.pyplot as plt
-import seaborn as sns
-import logging
-from typing import Optional
-from src.ai_agent.ai_report_enhancer import AIReportEnhancer
+从 typing import可选
+从src.ai_agent。ai_report_enhancer导入AIReportEnhancer
+进口的
+进口io
+进口日期时间
+以pd方式导入熊猫
+导入numpy为np
+从输入导入字典，列表，可选，联合
+从docx导入文档
+从多克斯。共享导入英寸，Pt, RGBColor
+从docx. enum_text导入WD_ALIGN_PARAGRAPH， WD_BREAK
+从docx. enum_table导入wd_table_align， WD_ALIGN_VERTICAL
+从matplotlib导入图
+进口tempfile
+进口matplotlib。Pyplot为PLT
+进口seaborn作为SNS
+导入日志
 
 # 模块级日志器
-logger = logging.getLogger(__name__)
+logger = logging.getLogger (__name__)
 logger.addHandler(logging.NullHandler())
 
 # 导入AI增强模块
-try:
-    from ..ai_agent.ai_report_enhancer import AIReportEnhancer, create_ai_enhancer, DEFAULT_CONFIGS
-    AI_ENHANCEMENT_AVAILABLE = True
-except ImportError:
-    AI_ENHANCEMENT_AVAILABLE = False
-    logger.warning("AI报告增强模块不可用，将跳过AI增强功能")
+试一试:
+从. . ai_agent。ai_report_enhancer导入AIReportEnhancer， create_ai_enhancer, DEFAULT_CONFIGS
+    AI_ENHANCEMENT_AVAILABLE = 真正的
+除了ImportError:
+    AI_ENHANCEMENT_AVAILABLE = 假
+    logger.警告("AI报告增强模块不可用，将跳过AI增强功能")
 
 
-class ReportGenerator:
+类ReportGenerator:
     """
     Word报告生成器，用于创建专业的数据报告文档
     """
