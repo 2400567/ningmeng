@@ -132,6 +132,9 @@ def initialize_session_state():
     
     if 'variables_merged' not in st.session_state:
         st.session_state.variables_merged = False
+    # 新增：变量映射完成标记（数据上传后独立的变量设置阶段）
+    if 'variable_mapping_completed' not in st.session_state:
+        st.session_state.variable_mapping_completed = False
     
     if 'analysis_completed' not in st.session_state:
         st.session_state.analysis_completed = False
@@ -165,6 +168,7 @@ def render_workflow_progress():
     steps = [
         {"name": "模板上传", "completed": st.session_state.template_uploaded, "icon": "📄"},
         {"name": "数据上传", "completed": st.session_state.data_uploaded, "icon": "📊"},
+        {"name": "变量设置", "completed": st.session_state.variable_mapping_completed, "icon": "🧩"},
         {"name": "变量合并", "completed": st.session_state.variables_merged, "icon": "🔗"},
         {"name": "AI分析", "completed": st.session_state.analysis_completed, "icon": "🤖"},
         {"name": "结果展示", "completed": st.session_state.analysis_completed, "icon": "📈"},
@@ -385,113 +389,23 @@ def render_step_2_data_upload():
             if missing_cols:
                 st.error(f"数据中缺少以下必需变量: {', '.join(missing_cols)}")
                 st.write("**可用列名:**", list(df.columns))
-                
-                # 添加智能变量映射功能
-                st.markdown("---")
-                st.subheader("🧠 智能变量映射")
-                st.info("系统检测到变量名不匹配，为您提供智能映射建议：")
-                
-                # 导入映射系统
-                import sys
-                import os
-                sys.path.append(os.getcwd())
-                from variable_mapping_system import create_variable_mapping_suggestions
-                
-                # 创建映射建议
-                mapping_suggestions = create_variable_mapping_suggestions(missing_cols, df.columns)
-                
-                # 显示映射界面
-                st.write("**📋 变量映射建议:**")
-                variable_mapping = {}
-                
-                for template_var in missing_cols:
-                    suggestions = mapping_suggestions.get(template_var, [])
-                    
-                    st.write(f"**模板变量**: `{template_var}`")
-                    
-                    if suggestions:
-                        # 显示建议的映射
-                        col1, col2 = st.columns([1, 2])
-                        with col1:
-                            st.write("**建议映射:**")
-                        with col2:
-                            # 创建选择框
-                            options = ["不映射"] + suggestions
-                            selected = st.selectbox(
-                                f"选择 {template_var} 的映射",
-                                options,
-                                key=f"mapping_{template_var}",
-                                help=f"选择数据中哪一列对应模板变量 {template_var}"
-                            )
-                            if selected != "不映射":
-                                variable_mapping[template_var] = selected
-                    else:
-                        st.write("❌ 未找到合适的映射建议")
-                        # 手动选择
-                        manual_selection = st.selectbox(
-                            f"手动选择 {template_var} 的映射",
-                            ["不映射"] + list(df.columns),
-                            key=f"manual_{template_var}"
-                        )
-                        if manual_selection != "不映射":
-                            variable_mapping[template_var] = manual_selection
-                    
-                    st.write("---")
-                
-                # 应用映射按钮
-                if st.button("🔄 应用变量映射", type="primary"):
-                    if variable_mapping:
-                        # 创建映射后的数据副本
-                        mapped_df = df.copy()
-                        
-                        # 重命名列
-                        rename_dict = {v: k for k, v in variable_mapping.items()}
-                        mapped_df = mapped_df.rename(columns=rename_dict)
-                        
-                        # 验证映射后的结果
-                        remaining_missing = []
-                        for var in template.variables:
-                            if isinstance(var, str):
-                                var_name = var
-                            else:
-                                var_name = var.name if hasattr(var, 'name') else str(var)
-                            
-                            if var_name not in mapped_df.columns:
-                                remaining_missing.append(var_name)
-                        
-                        if remaining_missing:
-                            st.warning(f"映射后仍缺少变量: {', '.join(remaining_missing)}")
-                        else:
-                            # 映射成功
-                            st.session_state.uploaded_data = mapped_df
-                            st.session_state.variable_mapping = variable_mapping
-                            st.session_state.data_uploaded = True
-                            st.session_state.workflow_step = 3
-                            
-                            st.success("✅ 变量映射成功！数据已准备就绪。")
-                            
-                            # 显示映射摘要
-                            with st.expander("📊 映射摘要"):
-                                st.write("**应用的映射关系:**")
-                                for template_var, data_col in variable_mapping.items():
-                                    st.write(f"- `{template_var}` ← `{data_col}`")
-                            
-                            st.rerun()
-                    else:
-                        st.warning("请至少选择一个变量映射")
+                st.info("当前阶段不再进行变量映射。请点击下方按钮进入【变量设置】阶段进行统一处理。")
+                if st.button("➡️ 进入变量设置阶段", type="primary"):
+                    st.session_state.uploaded_data = df
+                    st.session_state.data_uploaded = True
+                    st.session_state.workflow_step = 3  # 变量设置
+                    st.rerun()
             else:
                 st.session_state.uploaded_data = df
                 st.session_state.data_uploaded = True
-                st.session_state.workflow_step = 3
-                
+                st.session_state.workflow_step = 3  # 进入变量设置
                 st.markdown("""
                 <div class="success-box">
                     ✅ <strong>数据上传成功！</strong><br>
-                    数据格式验证通过，可以进行变量合并处理。
+                    您可以继续进入 <strong>变量设置</strong> 阶段，对题项进行映射与聚合。
                 </div>
                 """, unsafe_allow_html=True)
-                
-                # 显示数据摘要
+                # 数据摘要
                 col1, col2, col3 = st.columns(3)
                 with col1:
                     st.metric("样本数量", len(df))
@@ -499,63 +413,12 @@ def render_step_2_data_upload():
                     st.metric("变量数量", len(df.columns))
                 with col3:
                     st.metric("缺失值", df.isnull().sum().sum())
-                
-                # 数据预览
                 with st.expander("📊 数据预览"):
                     st.dataframe(df.head(10))
-                
-                # 添加题项变量映射选项
-                st.markdown("---")
-                st.subheader("🎯 题项变量映射（可选）")
-                st.info("""
-                如果您的数据包含问卷题项（如Q1, Q2等），可以使用题项变量映射功能
-                将题项按照构念分组，便于后续进行信度分析和结构方程建模。
-                """)
-                
-                col1, col2 = st.columns([1, 1])
-                with col1:
-                    if st.button("� 启用题项变量映射", key="enable_item_mapping"):
-                        st.session_state.show_item_mapping = True
-                        st.rerun()
-                
-                with col2:
-                    if st.button("⏭️ 跳过，继续下一步", type="primary"):
-                        st.rerun()
-                
-                # 题项变量映射界面
-                if st.session_state.get('show_item_mapping', False):
-                    st.markdown("---")
-                    try:
-                        # 创建题项映射系统
-                        mapper = ItemVariableMapper()
-                        
-                        # 检查数据中是否包含题项格式的列
-                        question_cols = [col for col in df.columns if any(pattern in col.upper() for pattern in ['Q1', 'Q2', 'Q3', 'Q4', 'Q5'])]
-                        
-                        if question_cols:
-                            st.success(f"✅ 检测到 {len(question_cols)} 个可能的题项列")
-                            
-                            # 渲染题项映射界面
-                            mapping = mapper.render_mapping_interface(list(df.columns))
-                            
-                            if mapping and st.button("✅ 应用题项映射并继续", type="primary"):
-                                # 应用映射
-                                mapped_df = mapper.apply_variable_mapping(df, mapping)
-                                st.session_state.uploaded_data = mapped_df
-                                st.session_state.item_mapping_applied = True
-                                st.success("✅ 题项变量映射已应用")
-                                st.rerun()
-                        else:
-                            st.warning("⚠️ 未检测到标准题项格式（Q1, Q2等），您可以跳过此步骤")
-                            if st.button("确认跳过题项映射"):
-                                st.session_state.show_item_mapping = False
-                                st.rerun()
-                    
-                    except Exception as e:
-                        st.error(f"题项映射功能出错: {e}")
-                        if st.button("跳过题项映射，继续"):
-                            st.session_state.show_item_mapping = False
-                            st.rerun()
+                if st.button("⏭️ 跳过变量设置，直接去变量合并", key="skip_var_map"):
+                    st.session_state.variable_mapping_completed = True
+                    st.session_state.workflow_step = 4
+                    st.rerun()
         
         except Exception as e:
             st.error("🚨 **数据读取失败**")
@@ -598,7 +461,83 @@ def render_step_2_data_upload():
 
 @ai_error_guard("STEP_3_VARIABLE_MERGING")
 def render_step_3_variable_merging():
-    """步骤3: 变量合并"""
+    pass  # placeholder retained below; actual merging step moved to STEP_4 after variable mapping
+
+@ai_error_guard("STEP_3_VARIABLE_MAPPING")
+def render_step_3_variable_mapping():
+    """变量设置阶段：支持为一个分析变量选择多个题项列并进行聚合创建。"""
+    st.header("🧩 变量设置（多题项映射）")
+    if 'uploaded_data' not in st.session_state:
+        st.warning("请先完成数据上传。")
+        return
+    df = st.session_state.uploaded_data
+    # 获取模板变量
+    template = st.session_state.get('current_template')
+    template_vars = []
+    if template and getattr(template, 'variables', None):
+        for var in template.variables:
+            template_vars.append(var if isinstance(var, str) else getattr(var, 'name', str(var)))
+    else:
+        st.info("模板未提供变量列表，将使用数据列进行选择。")
+        template_vars = list(df.columns)
+    st.write("选择需要配置的模板变量：")
+    selected_template_vars = st.multiselect("模板变量", template_vars, default=template_vars[:min(10, len(template_vars))])
+    if not selected_template_vars:
+        st.warning("请至少选择一个模板变量进行映射。")
+        return
+    st.markdown("---")
+    st.subheader("🔗 为每个模板变量选择多个题项")
+    mapping_result = {}
+    all_cols = list(df.columns)
+    for tv in selected_template_vars:
+        with st.expander(f"变量: {tv}", expanded=False):
+            # 过滤候选题项：包含 Q数字 或 与变量名部分匹配
+            import re
+            q_like = [c for c in all_cols if re.search(r"Q\d+", c, re.IGNORECASE)]
+            candidates = sorted(set(q_like + all_cols))
+            chosen = st.multiselect(
+                f"选择与 {tv} 相关的题项列（可多选）",
+                options=candidates,
+                default=[c for c in candidates if tv.lower() in c.lower()][:3],
+                help="可选择多个列，系统将对选定列进行聚合生成该变量"
+            )
+            agg_method = st.selectbox(
+                "聚合方式",
+                options=["mean", "sum"],
+                key=f"agg_{tv}",
+                help="mean=取平均，sum=求和"
+            )
+            if chosen:
+                mapping_result[tv] = {"items": chosen, "method": agg_method}
+            else:
+                st.info("未选择题项，将跳过该变量。")
+    if st.button("✅ 应用变量设置并继续", type="primary"):
+        if not mapping_result:
+            st.warning("尚无任何变量映射，无法应用。")
+            return
+        new_df = df.copy()
+        for var_name, cfg in mapping_result.items():
+            items = cfg['items']
+            method = cfg['method']
+            try:
+                subset = new_df[items].apply(pd.to_numeric, errors='coerce')
+                if method == 'mean':
+                    new_df[var_name] = subset.mean(axis=1)
+                elif method == 'sum':
+                    new_df[var_name] = subset.sum(axis=1)
+            except Exception as e:
+                st.error(f"变量 {var_name} 聚合失败: {e}")
+        st.session_state.uploaded_data = new_df
+        st.session_state.variable_multi_mapping = mapping_result
+        st.session_state.variable_mapping_completed = True
+        st.success("✅ 多题项变量设置已应用！")
+        st.session_state.workflow_step = 4  # 进入变量合并
+        st.rerun()
+
+@ai_error_guard("STEP_4_VARIABLE_MERGING")
+def render_step_4_variable_merging():
+    """步骤4: 变量合并 (在变量设置完成之后)"""
+    # 前置条件校验：需完成数据上传 & 变量设置
     if not st.session_state.data_uploaded:
         st.markdown("""
         <div class="warning-box">
@@ -607,10 +546,21 @@ def render_step_3_variable_merging():
         </div>
         """, unsafe_allow_html=True)
         return
-    
+    if not st.session_state.variable_mapping_completed:
+        st.markdown("""
+        <div class="warning-box">
+            ⚠️ <strong>请先完成变量设置</strong><br>
+            请在步骤3中为多题项变量建立聚合映射后再进行变量合并。
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("↩️ 返回变量设置", type="secondary"):
+            st.session_state.workflow_step = 3
+            st.rerun()
+        return
+
     st.markdown("""
     <div class="workflow-step">
-        <span class="step-number">3</span>
+        <span class="step-number">4</span>
         <strong>🔗 变量合并阶段</strong>
         <br><br>
         根据模板配置对相关变量进行合并处理，生成分析所需的复合变量。
@@ -651,7 +601,8 @@ def render_step_3_variable_merging():
                 
                 st.session_state.merged_data = merged_data
                 st.session_state.variables_merged = True
-                st.session_state.workflow_step = 4
+                # 完成变量合并后进入 AI 分析（步骤5）
+                st.session_state.workflow_step = 5
                 
                 st.markdown("""
                 <div class="success-box">
@@ -672,14 +623,13 @@ def render_step_3_variable_merging():
     if merged_data is not None:
         st.session_state.merged_data = merged_data
         st.session_state.variables_merged = True
-        st.session_state.workflow_step = 4
-        
+        st.session_state.workflow_step = 5  # 变量合并完成后进入AI分析（步骤5）
         if st.button("🚀 继续AI分析", type="primary"):
             st.rerun()
 
-@ai_error_guard("STEP_4_AI_ANALYSIS")
+@ai_error_guard("STEP_5_AI_ANALYSIS")
 def render_step_4_ai_analysis():
-    """步骤4: AI分析"""
+    """步骤5: AI分析 (变量设置与变量合并后)"""
     if not st.session_state.variables_merged:
         st.markdown("""
         <div class="warning-box">
@@ -691,7 +641,7 @@ def render_step_4_ai_analysis():
     
     st.markdown("""
     <div class="workflow-step">
-        <span class="step-number">4</span>
+        <span class="step-number">5</span>
         <strong>🤖 AI分析阶段</strong>
         <br><br>
         使用AI分析引擎对数据进行深度分析，支持多种统计模型和机器学习方法。
@@ -713,21 +663,19 @@ def render_step_4_ai_analysis():
     if analysis_results:
         st.session_state.analysis_results = analysis_results
         st.session_state.analysis_completed = True
-        st.session_state.workflow_step = 5
-        
+        st.session_state.workflow_step = 6  # 进入结果展示
         st.markdown("""
         <div class="success-box">
             ✅ <strong>AI分析完成！</strong><br>
             分析结果已生成，可以查看SPSSAU风格的专业展示。
         </div>
         """, unsafe_allow_html=True)
-        
         if st.button("🚀 查看分析结果", type="primary"):
             st.rerun()
 
-@ai_error_guard("STEP_5_RESULTS_DISPLAY")
+@ai_error_guard("STEP_6_RESULTS_DISPLAY")
 def render_step_5_results_display():
-    """步骤5: 结果展示"""
+    """步骤6: 结果展示"""
     if not st.session_state.analysis_completed:
         st.markdown("""
         <div class="warning-box">
@@ -739,7 +687,7 @@ def render_step_5_results_display():
     
     st.markdown("""
     <div class="workflow-step">
-        <span class="step-number">5</span>
+        <span class="step-number">6</span>
         <strong>📈 专业结果展示</strong>
         <br><br>
         使用SPSSAU风格的专业界面展示分析结果，包括统计表格、可视化图表和AI解读。
@@ -768,12 +716,12 @@ def render_step_5_results_display():
     
     # 继续生成报告
     if st.button("📝 生成学术报告", type="primary"):
-        st.session_state.workflow_step = 6
+        st.session_state.workflow_step = 7  # 进入报告生成
         st.rerun()
 
-@ai_error_guard("STEP_6_REPORT_GENERATION")
+@ai_error_guard("STEP_7_REPORT_GENERATION")
 def render_step_6_report_generation():
-    """步骤6: 报告生成"""
+    """步骤7: 报告生成"""
     if not st.session_state.analysis_completed:
         st.markdown("""
         <div class="warning-box">
@@ -785,7 +733,7 @@ def render_step_6_report_generation():
     
     st.markdown("""
     <div class="workflow-step">
-        <span class="step-number">6</span>
+        <span class="step-number">7</span>
         <strong>📝 AI学术报告生成</strong>
         <br><br>
         基于分析结果和参考文献，AI自动生成符合学术标准的研究报告。
@@ -830,10 +778,11 @@ def render_sidebar():
         step_options = [
             "1️⃣ 模板上传",
             "2️⃣ 数据上传", 
-            "3️⃣ 变量合并",
-            "4️⃣ AI分析",
-            "5️⃣ 结果展示",
-            "6️⃣ 报告生成"
+            "3️⃣ 变量设置",
+            "4️⃣ 变量合并",
+            "5️⃣ AI分析",
+            "6️⃣ 结果展示",
+            "7️⃣ 报告生成"
         ]
         
         selected_step = st.selectbox(
@@ -855,6 +804,7 @@ def render_sidebar():
         status_items = [
             ("模板", st.session_state.template_uploaded),
             ("数据", st.session_state.data_uploaded),
+            ("变量设置", st.session_state.variable_mapping_completed),
             ("合并", st.session_state.variables_merged),
             ("分析", st.session_state.analysis_completed),
             ("报告", st.session_state.report_generated)
@@ -890,15 +840,17 @@ def render_sidebar():
             **工作流说明:**
             1. 📄 上传分析模板
             2. 📊 上传调查数据  
-            3. 🔗 进行变量合并
-            4. 🤖 执行AI分析
-            5. 📈 查看专业结果
-            6. 📝 生成学术报告
+            3. 🧩 变量设置（多题项聚合定义）
+            4. 🔗 变量合并（按模板合并派生变量）
+            5. 🤖 AI分析
+            6. 📈 结果展示
+            7. 📝 报告生成
             
             **注意事项:**
-            - 必须按顺序完成各步骤
-            - 模板定义了分析流程
-            - 数据格式需与模板匹配
+            - 建议按顺序完成各步骤；可通过左侧“跳转到步骤”快速定位
+            - 模板定义分析类型与可选合并规则
+            - 变量设置阶段可对多题项生成新的聚合变量
+            - 数据列名需与模板及映射配置匹配
             """)
 
 @ai_error_guard("ERROR_LOG_VIEWER")
@@ -1087,12 +1039,16 @@ def main():
         elif current_step == 2:
             render_step_2_data_upload()
         elif current_step == 3:
-            render_step_3_variable_merging()
+            # 新增变量设置阶段（多题项映射）
+            render_step_3_variable_mapping()
         elif current_step == 4:
-            render_step_4_ai_analysis()
+            # 原变量合并阶段后移
+            render_step_4_variable_merging()
         elif current_step == 5:
-            render_step_5_results_display()
+            render_step_4_ai_analysis()
         elif current_step == 6:
+            render_step_5_results_display()
+        elif current_step == 7:
             render_step_6_report_generation()
     
     # 页脚
