@@ -3,8 +3,8 @@
 ## 说明：若强制使用 Python 3.12 可保留旧版本，但当前策略改为升级以直接兼容 3.13
 streamlit==1.40.0
 matplotlib==3.9.0
-pandas==2.2.0         # >=2.2.0 提供 Python 3.13 轮子
-numpy==2.0.0          # 2.0.x 系列提供 Py3.13 稳定轮子；避免老版本触发构建
+pandas==2.2.0         # >=2.2.0 提供 Python 3.13 轮子；注意其要求 numpy < 2
+numpy==1.26.4         # 满足 pandas 2.2.0 的 >=1.26,<2 约束；Py3.13 有轮子
 scikit-learn==1.6.0   # 1.6.0 起官方支持 Python 3.13
 seaborn==0.13.2
 plotly==5.18.0
