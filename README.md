@@ -2,14 +2,7 @@
 
 ## 部署指南 (Streamlit Cloud)
 
-如果在 Streamlit Cloud 构建时出现如下错误:
-
-```
-No solution found when resolving dependencies:
-Because you require tqdm==4.67.1 and tqdm==4.66.1, we can conclude that your requirements are unsatisfiable.
-```
-
-或使用 Python 3.13 导致大量包需要从源码编译耗时/失败，请按以下步骤：
+如果在 Streamlit Cloud 构建时出现依赖冲突（例如早期曾出现的 `tqdm==4.67.1` 与 `tqdm==4.66.1` 版本同时被解析）或使用 Python 3.13 导致大量包从源码编译耗时/失败，请按以下步骤：
 
 1. 确保仓库根目录存在 `runtime.txt` 并指定受支持版本，例如:
 	```

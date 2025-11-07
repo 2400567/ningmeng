@@ -1,0 +1,8 @@
+[project]
+name = "ningmeng"
+version = "0.0.0"
+requires-python = ">=3.12,<3.13"
+# Minimal metadata; extend with dependencies if migrating fully to pyproject management.
+
+[tool.streamlit]
+# Reserved section for potential future Streamlit-specific settings.
