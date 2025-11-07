@@ -1,0 +1,7 @@
+[server]
+headless = true
+
+[browser]
+gatherUsageStats = false
+
+# NOTE: Streamlit 不直接通过此文件强制 Python 版本，真正版本由部署平台解析 .python-version / runtime.txt

@@ -1,11 +1,10 @@
-## Python 3.13 兼容核心依赖
-## 原版本 (pandas 2.1.3 / scikit-learn 1.4.2 / matplotlib 3.8.3 / streamlit 1.33.0) 在 Cloud 默认 Python 3.13 上缺少轮子，导致源码编译和 numpy rc 依赖错误
-## 说明：若强制使用 Python 3.12 可保留旧版本，但当前策略改为升级以直接兼容 3.13
-streamlit>=1.40.0
-matplotlib>=3.9.0
-pandas>=2.2.0          # Python 3.13 轮子；与 numpy <2 兼容
-numpy>=1.26.4,<2       # 满足 pandas >=2.2.0 约束，避免 2.x 冲突
-scikit-learn>=1.6.0    # 官方支持 Python 3.13 起始版本
+## Python 3.11/3.12 兼容核心依赖（避开 3.13 + NumPy 2.0 早期构建问题）
+## 若未来需要 NumPy 2.x：升级 pandas>=2.2.2 与 scikit-learn>=1.6.0 并同步 constraints。
+streamlit==1.40.0
+matplotlib==3.8.0        # 按用户建议选用稳定版本 3.8.x
+pandas==2.2.0            # 需要 numpy <2.0
+numpy==1.26.4            # 精确锁定，避免不同 patch 版本导致重复解析
+scikit-learn==1.5.0      # 按建议回退到 1.5.0（依旧支持 Py 3.11/3.12）
 seaborn==0.13.2
 plotly==5.18.0
 
@@ -15,6 +14,8 @@ PyPDF2>=3.0.0
 # AI大模型依赖
 openai==2.7.1
 requests>=2.31.0
+pytz>=2021.1
+python-dotenv>=1.0.0      # 新增：用于本地加载环境变量（API keys 等）
 pydantic==2.12.4
 tqdm==4.67.1  # 固定版本，防止与其它文件出现 >= 旧版本冲突
 distro==1.9.0
