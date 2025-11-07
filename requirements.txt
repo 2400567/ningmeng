@@ -1,3 +1,4 @@
+ -c constraints.txt
 streamlit>=1.28.0
 matplotlib>=3.5.0
 # 统一环境：Python 3.12 采用 pandas 2.1.3（仍有稳定轮子）与 numpy 1.26.4（首个全面支持 Py3.12 的版本）
