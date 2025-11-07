@@ -5,6 +5,16 @@ __pycache__/
 *.DS_Store
 venv/
 AI/venv/
+.venv/
+AI/temp/
+temp/
+.env
+.env.*
+.python-version
+ai_analyzer.log
+AI/ai_analyzer.log
+AI/streamlit.log
+AI/test_report_fix.log
 .Python
 *.log
 *.pid
@@ -29,3 +39,8 @@ AI/**/__pycache__/
 coverage/
 htmlcov/
 reports/tmp/
+# Stray Windows path artifacts removed earlier
+AI/=1.0.0
+AI/AI/
+AI/C:\Users\Lenovo\Desktop/
+AI/"C:\Users\Lenovo\Desktop"/
