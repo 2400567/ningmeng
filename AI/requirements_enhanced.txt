@@ -1,7 +1,7 @@
-# 核心依赖
+# 核心依赖（统一：与主 requirements 保持一致，减少部署差异）
 streamlit>=1.28.0
-pandas>=2.0.0
-numpy>=1.24.0
+pandas==2.1.3
+numpy==1.26.4  # 1.24.x 不支持 Python 3.12，升级到兼容版本并与其它文件一致
 matplotlib>=3.7.0
 seaborn>=0.12.0
 plotly>=5.15.0
@@ -46,3 +46,5 @@ pydantic>=2.0.0
 # 日志和配置
 loguru>=0.7.0
 pyyaml>=6.0
+\n+# 新增统一进度条版本，防止隐式拉取旧版
+tqdm==4.67.1

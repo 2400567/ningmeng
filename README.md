@@ -18,19 +18,16 @@ Because you require tqdm==4.67.1 and tqdm==4.66.1, we can conclude that your req
 	这样可避免使用尚未完全支持的 3.13 版本。
 2. 在 `AI/requirements.txt` 中确保只保留一处 tqdm 版本 (当前已为 `tqdm==4.67.1`)；删除或注释重复条目。
 3. 对可选大型依赖（xgboost / lightgbm / catboost / torch / tensorflow）保持注释状态以缩短构建。
-4. 如果仍有构建超时，可创建一个精简文件 `requirements-core.txt` 仅含核心运行所需:
+4. 如果仍有构建超时，可使用已新增的拆分文件：
+	- `requirements-base.txt`：核心依赖（快速构建）
+	- `requirements-optional.txt`：扩展/重量依赖（按需）
+
+	Cloud 上设置优先指向 `requirements-base.txt`，完成构建后再在运行环境里追加安装可选包：
 	```
-	pandas==2.2.1
-	numpy==1.26.4
-	streamlit==1.33.0
-	plotly==5.18.0
-	scikit-learn==1.4.2
-	openai==2.7.1
-	pydantic==2.12.4
-	tqdm==4.67.1
-	PyYAML==6.0.1
+	pip install -r requirements-optional.txt
 	```
-	然后在 Cloud 设置里改用该文件（或将其复制为根目录 `requirements.txt`）。
+
+5. 保持多处 requirements 的版本统一（已经统一 pandas==2.1.3 / numpy==1.26.4 / tqdm==4.67.1）。避免一个文件使用 `>=` 而另一个固定旧版造成冲突。
 
 ## 本地启动
 
@@ -42,6 +39,20 @@ streamlit run AI/enhanced_app.py --server.port 8501
 简单版:
 ```
 streamlit run AI/simple_start.py --server.port 8502
+```
+
+## 环境快速自检
+
+运行脚本打印关键依赖版本：
+```
+python scripts/check_env.py
+```
+
+若出现 `NOT INSTALLED` 可确认对应包是否在 base 或 optional 文件中并执行：
+```
+pip install -r requirements-base.txt
+# 或/以及
+pip install -r requirements-optional.txt
 ```
 
 ## 错误自动上报

@@ -1,7 +1,8 @@
 streamlit>=1.28.0
 matplotlib>=3.5.0
-pandas>=1.5.0
-numpy>=1.21.0
+# 统一环境：Python 3.12 采用 pandas 2.1.3（仍有稳定轮子）与 numpy 1.26.4（首个全面支持 Py3.12 的版本）
+pandas==2.1.3
+numpy==1.26.4
 seaborn>=0.11.0
 plotly>=5.0.0
 scipy>=1.7.0
@@ -33,3 +34,5 @@ PyPDF2>=3.0.0
 statsmodels>=0.13.0
 pingouin>=0.5.0
 openai>=1.0.0
+\n+# 新增：进度条库统一固定版本，避免多处文件给出不同约束导致冲突
+tqdm==4.67.1
